@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/service_provider_logo"
+            android:layout_width="@dimen/size_48dp"
+            android:layout_height="@dimen/size_48dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars[0]" />
+
+        <TextView
+            android:id="@+id/service_provider_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toEndOf="@+id/service_provider_logo"
+            app:layout_constraintTop_toTopOf="@+id/service_provider_logo"
+            tools:text="Moovi ltd" />
+
+        <TextView
+            android:id="@+id/service_provider_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/service_provider_name"
+            app:layout_constraintTop_toBottomOf="@+id/service_provider_name"
+            tools:text="90004" />
+
+        <TextView
+            android:id="@+id/amount_to_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/service_provider_logo"
+            tools:text="450,00" />
+
+        <TextView
+            android:id="@+id/amount_to_pay_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/payment_card_currency"
+            app:layout_constraintBaseline_toBaselineOf="@+id/amount_to_pay"
+            app:layout_constraintStart_toEndOf="@+id/amount_to_pay" />
+
+        <TextView
+            android:id="@+id/phone_number_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/payment_card_view_phone_number_prompt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/amount_to_pay" />
+
+        <TextView
+            android:id="@+id/phone_number_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/payment_card_phone_number_prefix"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="@+id/phone_number_label"
+            app:layout_constraintTop_toBottomOf="@+id/phone_number_label"
+            tools:text="+258 84" />
+
+        <EditText
+            android:id="@+id/phone_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/payment_card_phone_number_hint"
+            android:inputType="phone"
+            android:maxLength="7"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintBaseline_toBaselineOf="@+id/phone_number_prefix"
+            app:layout_constraintStart_toEndOf="@+id/phone_number_prefix" />
+
+        <Button
+            android:id="@+id/pay_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button_selector"
+            android:enabled="false"
+            android:text="@string/payment_card_pay_button_text"
+            android:textColor="@color/color_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone_number"
+            tools:text="Pay with m-pesa" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</merge>

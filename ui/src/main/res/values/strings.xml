@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Mpesa-Lib-UI</string>
+    <string name="payment_activity_toolbar_title">Make Payment</string>
+
+    <!-- Make payment card -->
+    <string name="payment_card_currency">Mt</string>
+    <string name="payment_card_phone_number_hint">0001002</string>
+    <string name="payment_card_phone_number_prefix">+258 84</string>
+    <string name="payment_card_pay_button_text">Pay with m-pesa</string>
+    <string name="payment_card_view_phone_number_prompt">Insert your m-pesa account phone number</string>
+
+    <!-- Authorizing Payment Card-->
+    <string name="payment_authentication_card_title">Check your phone</string>
+    <string name="payment_authentication_card_description">
+        An USSD notification was sent to the number: %s
+        \n\nInsert your m-mpesa pin to complete the transaction.
+    </string>
+    <string name="payment_authentication_card_learn_more_button_text">Learn more</string>
+    <string name="payment_authentication_card_timer_seconds_text">Seconds</string>
+
+    <!-- errorPayment card-->
+    <string name="payment_error_card_title">Payment Failed</string>
+    <string name="payment_error_card_retry_button">Try Again</string>
+
+    <!--Response error message -->
+    <string name="payment_response_ins_0">Payment completed successfully.</string>
+    <string name="payment_response_ins_9">Payment timed out due to the lack of the pin input.</string>
+    <string name="payment_response_ins_unhandled_response">Something wrong while processing payment.</string>
+    <string name="payment_response_ins_2006">Payment failed because there is not enough balance on the account.</string>
+    <string name="payment_response_ins_2051">Payment failed because the number inserted is not a valid m-pesa account</string>
+    <string name="payment_response_ins_4">Payment failed because the user associated to the account for the inserted phone number is invalid</string>
+    <string name="payment_response_network_error">We could not connect to the internet to process the payment. Please check your internet connectivity and try again!</string>
+
+</resources>

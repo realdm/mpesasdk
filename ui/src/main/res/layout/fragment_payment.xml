@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/red_dark"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <mz.co.moovi.mpesalibui.payment.PaymentViewCard
+        android:id="@+id/start_payment_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_16dp"/>
+
+    <mz.co.moovi.mpesalibui.payment.authentication.PaymentAuthenticationCard
+        android:id="@+id/payment_authentication_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_16dp"
+        android:visibility="gone" />
+
+    <mz.co.moovi.mpesalibui.payment.error.PaymentErrorCardView
+        android:id="@+id/payment_error_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/space_16dp"
+        android:visibility="gone" />
+
+</LinearLayout>
