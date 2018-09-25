@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         MpesaSdk.init(
                 serviceProviderCode = "171717",
                 serviceProviderName = "Vodacom",
-                apiKey = "woyih8h5xvpblitop07elf58l4hpbt08",
+                apiKey = "put_your_api_key_here",
                 serviceProviderLogoUrl = "https://www.vodacom.co.za/vodacom/home/images/header/vodacom_icon.77b545abd1d7a4e0808b5a2255438f64.png" )
 
         MpesaSdk.pay(activity = this, requestCode = 1, amount = "1", transactionReference = "T12335C")
