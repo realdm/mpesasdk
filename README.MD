@@ -7,6 +7,11 @@ M-pesa payments api on android apps.
 
 ## Usage
 
+### Getting M-Pesa Credentials
+
+Create an account on the Vodacom Mozambique M-pesa [website](https://developer.mpesa.vm.co.mz/) in 
+order to get the credentials and full documentation of the API
+
 ### Core
 
 This library provides the core components to perform the network operation to the M-pesa api. 
