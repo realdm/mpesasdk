@@ -137,6 +137,20 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 }
 ```
 
+### Screenshots
+
+Make payment
+
+![Alt text](/Documentation/ui-screenshots/make_payment.png)
+
+Processing Payment
+
+![Alt text](/Documentation/ui-screenshots/processing_payment.png)
+
+Payment Failure
+
+![Alt text](/Documentation/ui-screenshots/payment_failed.png)
+
 #### Download
 Add a gradle dependency to your project:
 ```groovy
