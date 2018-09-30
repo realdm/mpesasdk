@@ -24,11 +24,12 @@
 
     <!--Response error message -->
     <string name="payment_response_ins_0">Payment completed successfully.</string>
-    <string name="payment_response_ins_9">Payment timed out due to the lack of the pin input.</string>
     <string name="payment_response_ins_unhandled_response">Something wrong while processing payment.</string>
-    <string name="payment_response_ins_2006">Payment failed because there is not enough balance on the account.</string>
+    <string name="payment_response_ins_2006">Payment failed due to insuficient balance in the account.</string>
+    <string name="payment_response_ins_5">Payment cancelled. Try again if you want to change the m-pesa account phone number</string>
+    <string name="payment_response_ins_4">Payment Failed. The inserted phone number does not have a valid m-pesa account</string>
+    <string name="payment_response_ins_9">Payment request timed out because authorization pin was not inserted in time.</string>
     <string name="payment_response_ins_2051">Payment failed because the number inserted is not a valid m-pesa account</string>
-    <string name="payment_response_ins_4">Payment failed because the user associated to the account for the inserted phone number is invalid</string>
     <string name="payment_response_network_error">We could not connect to the internet to process the payment. Please check your internet connectivity and try again!</string>
 
 </resources>
