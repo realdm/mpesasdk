@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.shopify.livedataktx.SingleLiveData
 import io.reactivex.disposables.Disposable
+import mz.co.moovi.mpesalib.api.MpesaService
 import mz.co.moovi.mpesalib.api.PaymentRequest
 import mz.co.moovi.mpesalib.api.PaymentResponse
-import mz.co.moovi.mpesalib.api.MpesaService
 import mz.co.moovi.mpesalibui.R
 import mz.co.moovi.mpesalibui.extensions.errorMessageResourceId
 import mz.co.moovi.mpesalibui.payment.authentication.PaymentAuthenticationCardViewState
@@ -47,7 +47,6 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
             is PaymentViewAction.MakePayment -> onMakePayment()
             is PaymentViewAction.AddPhoneNumber -> onAddNumber(viewAction)
             is PaymentViewAction.ShowError -> postErrorCardViewState(viewAction.messageResId)
-
         }
     }
 
@@ -81,22 +80,35 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
 
         val viewState = PaymentViewState(paymentCard = paymentCard)
         _viewState.postValue(viewState)
+
+        postPayButtonStateAction()
     }
 
     private fun onAddNumber(viewAction: PaymentViewAction.AddPhoneNumber) {
         phoneNumber = viewAction.phoneNumber
-        val isValid = !phoneNumber.isEmpty() && phoneNumber.length == 7
-        val action = if (isValid) PaymentViewModelAction.EnablePaymentButton else PaymentViewModelAction.DisablePaymentButton
+        postPayButtonStateAction()
+    }
+
+    private fun postPayButtonStateAction() {
+        val action = if (hasValidPhoneNumber()) {
+            PaymentViewModelAction.EnablePaymentButton
+        } else {
+            PaymentViewModelAction.DisablePaymentButton
+        }
         _action.postValue(action)
     }
 
-    private fun onMakePayment() {
-        val paymentRequest = createPaymentRequest()
-        disposable = mpesaService.pay(paymentRequest)
-                .subscribe { response, throwable -> handleResponse(response, throwable) }
+    private fun hasValidPhoneNumber(): Boolean {
+        return !phoneNumber.isEmpty() && phoneNumber.length == 7
+    }
 
+    private fun onMakePayment() {
         val viewState = PaymentAuthenticationCardViewState(phoneNumber = "(+258) 84$phoneNumber")
         _viewState.postValue(PaymentViewState(authenticationCard = viewState))
+
+        val paymentRequest = createPaymentRequest()
+        disposable = mpesaService.pay(paymentRequest)
+            .subscribe { response, throwable -> handleResponse(response, throwable) }
     }
 
     private fun createPaymentRequest(): PaymentRequest {
@@ -123,8 +135,8 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
             when (throwable) {
                 is HttpException -> {
                     val json = throwable.response().errorBody()?.string()
-                    val response = Gson().fromJson(json, PaymentResponse::class.java)
-                    val errorMessageId = response.output_ResponseCode.errorMessageResourceId()
+                    val gsonResponse = Gson().fromJson(json, PaymentResponse::class.java)
+                    val errorMessageId = gsonResponse.output_ResponseCode.errorMessageResourceId()
                     postErrorCardViewState(errorMessageId)
                 }
                 is UnknownHostException -> {
