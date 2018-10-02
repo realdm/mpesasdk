@@ -21,7 +21,7 @@ of the SDK that better suits your project needs.
 This library makes the network calls using Retrofit and the responses are adapter to RxJava2 types
 using the RxJava2Adapter.
 
-#### Create an m-pesa service
+#### Create an M-pesa service
 ```kotlin
 fun createMpesaService(): MpesaService {
    val config = MpesaConfig(baseUrl = API_BASE_URL, apiKey = apiKey, publicKey = publicKey)
