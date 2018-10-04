@@ -146,15 +146,15 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 Make payment
 
-![Alt text](/Documentation/ui-screenshots/make_payment.png)
+<img src="/Documentation/ui-screenshots/make_payment.png" height="480" width="270" alt="Alt text"/>
 
 Processing Payment
 
-![Alt text](/Documentation/ui-screenshots/processing_payment.png)
+<img src="/Documentation/ui-screenshots/processing_payment.png" height="480" width="270" alt="Alt text"/>
 
 Payment Failure
 
-![Alt text](/Documentation/ui-screenshots/payment_failed.png)
+<img src="/Documentation/ui-screenshots/payment_failed.png" height="480" width="270" alt="Alt text"/>
 
 #### Download
 Add a gradle dependency to your project:
