@@ -32,7 +32,7 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
 
     private lateinit var amount: String
     private var phoneNumber: String = ""
-    private lateinit var disposable: Disposable
+    private var disposable: Disposable? = null
     private lateinit var serviceProviderName: String
     private lateinit var serviceProviderCode: String
     private lateinit var thirdPartyReference: String
@@ -157,7 +157,7 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        disposable.dispose()
+        disposable?.dispose()
     }
 
 }
