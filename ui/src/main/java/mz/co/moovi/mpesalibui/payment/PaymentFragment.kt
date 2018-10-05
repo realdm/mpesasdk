@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.fragment_payment.toolbar
 import mz.co.moovi.mpesalibui.MpesaSdk
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_CODE
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_LOGO_URL
@@ -19,7 +20,6 @@ import mz.co.moovi.mpesalibui.R
 import mz.co.moovi.mpesalibui.extensions.provideViewModel
 import mz.co.moovi.mpesalibui.ui.Action
 import mz.co.moovi.mpesalibui.ui.ViewState
-import kotlinx.android.synthetic.main.fragment_payment.toolbar as toolbar
 import kotlinx.android.synthetic.main.fragment_payment.payment_authentication_card as authCard
 import kotlinx.android.synthetic.main.fragment_payment.payment_error_card as errorCard
 import kotlinx.android.synthetic.main.fragment_payment.start_payment_card as paymentCard
@@ -112,6 +112,7 @@ class PaymentFragment : Fragment() {
 
     private fun setupToolbar() {
         toolbar.let { it ->
+            it.title = resources.getString(R.string.payment_activity_toolbar_title)
             it.setNavigationIcon(R.drawable.ic_close_24dp)
             it.setNavigationOnClickListener {
                 viewModel.handleViewAction(PaymentViewAction.Cancel)

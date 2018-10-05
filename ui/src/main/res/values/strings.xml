@@ -6,7 +6,7 @@
     <string name="payment_card_currency">Mt</string>
     <string name="payment_card_phone_number_hint">0001002</string>
     <string name="payment_card_phone_number_prefix">+258 84</string>
-    <string name="payment_card_pay_button_text">Pay with m-pesa</string>
+    <string name="payment_card_pay_button_text">Pay with M-pesa</string>
     <string name="payment_card_view_phone_number_prompt">Insert your m-pesa account phone number</string>
 
     <!-- Authorizing Payment Card-->
