@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mpesa-Lib-UI</string>
     <string name="payment_activity_toolbar_title">Faça o Pagamento</string>
     <string name="payment_card_pay_button_text">Pague com o M-Pesa</string>
     <string name="payment_card_view_phone_number_prompt">Insira o número de telefone da sua conta M-Pesa</string>

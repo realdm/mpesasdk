@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mpesa-Lib-UI</string>
+    <string name="app_name" translatable="false">Mpesa-Lib-UI</string>
     <string name="payment_activity_toolbar_title">Make Payment</string>
 
     <!-- Make payment card -->
