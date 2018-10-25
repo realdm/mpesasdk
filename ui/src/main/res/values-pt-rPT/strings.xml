@@ -9,7 +9,7 @@
     <string name="payment_authentication_card_timer_seconds_text">Segundos</string>
     <string name="payment_error_card_title">O Pagamento Falhou</string>
     <string name="payment_error_card_retry_button">Tente Novamente</string>
-    <string name="payment_response_ins_0">Pagemento Concluído com Sucesso.</string>
+    <string name="payment_response_ins_0">Pagamento Concluído com Sucesso.</string>
     <string name="payment_response_ins_unhandled_response">Algo deu errado ao processar o seu pagamento.</string>
     <string name="payment_response_ins_2006">O pagamento falhou devido ao saldo insuficiente na sua conta.</string>
     <string name="payment_response_ins_5">Pagamento cancelado. Tente novamente se quiser alterar o número da conta M-Pesa.</string>
