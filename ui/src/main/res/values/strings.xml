@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">Mpesa-Lib-UI</string>
+    <string name="app_name" translatable="false">Mpesa-Lib-UI</string>
     <string name="payment_activity_toolbar_title">Make Payment</string>
 
     <!-- Make payment card -->
-    <string name="payment_card_currency">Mt</string>
-    <string name="payment_card_phone_number_hint">0001002</string>
-    <string name="payment_card_phone_number_prefix">+258 84</string>
+    <string name="payment_card_currency" translatable="false">Mt</string>
+    <string name="payment_card_phone_number_hint" translatable="false">0001002</string>
+    <string name="payment_card_phone_number_prefix" translatable="false">+258 84</string>
     <string name="payment_card_pay_button_text">Pay with M-pesa</string>
-    <string name="payment_card_view_phone_number_prompt">Insert your m-pesa account phone number</string>
+    <string name="payment_card_view_phone_number_prompt">Insert your M-Pesa account phone number</string>
 
     <!-- Authorizing Payment Card-->
     <string name="payment_authentication_card_title">Check your phone</string>
@@ -27,9 +27,9 @@
     <string name="payment_response_ins_unhandled_response">Something wrong while processing payment.</string>
     <string name="payment_response_ins_2006">Payment failed due to insuficient balance in the account.</string>
     <string name="payment_response_ins_5">Payment cancelled. Try again if you want to change the m-pesa account phone number</string>
-    <string name="payment_response_ins_4">Payment Failed. The inserted phone number does not have a valid m-pesa account</string>
-    <string name="payment_response_ins_9">Payment request timed out because authorization pin was not inserted in time.</string>
-    <string name="payment_response_ins_2051">Payment failed because the number inserted is not a valid m-pesa account</string>
+    <string name="payment_response_ins_4">Payment Failed. The inserted phone number does not have a valid M-Pesa account</string>
+    <string name="payment_response_ins_9">Payment request timed out because authorization PIN was not inserted in time.</string>
+    <string name="payment_response_ins_2051">Payment failed because the number inserted is not a valid M-Pesa account</string>
     <string name="payment_response_network_error">We could not connect to the internet to process the payment. Please check your internet connectivity and try again!</string>
 
 </resources>
