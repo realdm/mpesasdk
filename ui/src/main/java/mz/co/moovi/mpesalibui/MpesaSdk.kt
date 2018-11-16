@@ -11,7 +11,7 @@ object MpesaSdk {
 
     const val ARG_RESULT_TRANSACTION_ID = "transaction_id"
     const val ARG_RESULT_CONVERSATION_ID = "conversation_id"
-
+    
     const val ARG_SERVICE_PROVIDER_NAME = "arg_provider_name"
     const val ARG_SERVICE_PROVIDER_CODE = "arg_provider_code"
     const val ARG_TRANSACTION_AMOUNT = "arg_transaction_amount"
@@ -19,8 +19,7 @@ object MpesaSdk {
     const val ARG_TRANSACTION_REFERENCE = "arg_transaction_reference"
     const val ARG_SERVICE_PROVIDER_LOGO_URL = "arg_service_provider_logo_urls"
 
-    const val SANDBOX_BASE_URL = "https://api.sandbox.vm.co.mz:18346"
-    const val PRODUCTION_BASE_URL = ""
+    private const val SANDBOX_BASE_URL = "https://api.sandbox.vm.co.mz:18346"
 
     private var initialized = false
 
@@ -40,15 +39,24 @@ object MpesaSdk {
     val serviceProviderLogoUrl: String
         get() = _serviceProviderLogoUrl
 
-    fun init(apiKey: String,
-             serviceProviderName: String,
-             serviceProviderCode: String,
-             serviceProviderLogoUrl: String = "") {
+    private lateinit var _endpointUrl: String
+    val endpointUrl: String
+        get() = _endpointUrl
 
-        if(initialized) {
+    fun init(
+        apiKey: String,
+        serviceProviderName: String,
+        serviceProviderCode: String,
+        serviceProviderLogoUrl: String = "",
+        endpointUrl: String = SANDBOX_BASE_URL
+
+    ) {
+
+        if (initialized) {
             throw IllegalArgumentException("SDK is already initialized")
         }
         _apiKey = apiKey
+        _endpointUrl = endpointUrl
         _serviceProviderCode = serviceProviderCode
         _serviceProviderName = serviceProviderName
         _serviceProviderLogoUrl = serviceProviderLogoUrl
