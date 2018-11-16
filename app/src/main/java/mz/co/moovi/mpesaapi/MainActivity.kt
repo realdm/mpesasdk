@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         ///Initialize with application once
         MpesaSdk.init(
                 apiKey = "your_api_key_here",
-                publicKey = """your_api_key_here""",
+                publicKey = """your_public_key_here""",
                 endpointUrl = "your_endpoint_url_here",
                 serviceProviderName = "your_service_name_here",
                 serviceProviderCode = "your_service_provide_code_here",

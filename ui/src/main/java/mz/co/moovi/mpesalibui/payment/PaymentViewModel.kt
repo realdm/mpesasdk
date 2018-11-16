@@ -136,7 +136,12 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
                 is HttpException -> {
                     val json = throwable.response().errorBody()?.string()
                     val gsonResponse = Gson().fromJson(json, PaymentResponse::class.java)
-                    val errorMessageId = gsonResponse.output_ResponseCode.errorMessageResourceId()
+                    val outputResponse = gsonResponse.output_ResponseCode
+                    val errorMessageId = if (outputResponse != null) {
+                        outputResponse.errorMessageResourceId()
+                    } else {
+                        R.string.payment_response_ins_unhandled_response
+                    }
                     postErrorCardViewState(errorMessageId)
                 }
                 is UnknownHostException -> {
