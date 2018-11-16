@@ -99,10 +99,15 @@ Note: Calling init more than once will throw an IllegalStateException.
 ```kotlin
 MpesaSdk.init(
    apiKey = "m_pesa_api_key",
+   publicKey = "your_public_key",
+   endpointUrl = "the_endpoint_url",
    serviceProviderCode = "m_pesa_service_provider_code",
    serviceProviderName = "service_provider_company_display_name",
    serviceProviderLogoUrl = "https://www.vodacom.co.za/vodacom/home/images/header/vodacom_icon.77b545abd1d7a4e0808b5a2255438f64.png")
 ```
+
+Note: The endpoint url's for the sandbox and production environment are constants in the MpesaSdk with the names
+      SANDBOX_BASE_URL and PRODUCTION_BASE_URL respectively.  
 
 #### Make Payment
 Make the payment by calling the `pay` provided by the M-pesa sdk. 

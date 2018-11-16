@@ -19,7 +19,8 @@ object MpesaSdk {
     const val ARG_TRANSACTION_REFERENCE = "arg_transaction_reference"
     const val ARG_SERVICE_PROVIDER_LOGO_URL = "arg_service_provider_logo_urls"
 
-    private const val SANDBOX_BASE_URL = "https://api.sandbox.vm.co.mz:18346"
+    const val PRODUCTION_BASE_URL = "https://api.vm.co.mz:18346"
+    const val SANDBOX_BASE_URL = "https://api.sandbox.vm.co.mz:18346"
 
     private var initialized = false
 
@@ -50,11 +51,10 @@ object MpesaSdk {
     fun init(
         apiKey: String,
         publicKey: String,
+        endpointUrl: String,
         serviceProviderName: String,
         serviceProviderCode: String,
-        serviceProviderLogoUrl: String = "",
-        endpointUrl: String = SANDBOX_BASE_URL
-
+        serviceProviderLogoUrl: String
     ) {
 
         if (initialized) {
