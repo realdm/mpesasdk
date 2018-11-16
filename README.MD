@@ -81,7 +81,7 @@ private fun handleResponse(response: PaymentResponse?, throwable: Throwable?) {
 #### Download
 Add a gradle dependency to your project:
 ```groovy
-implementation 'com.github.realdm.mpesasdk:core:0.0.1'
+implementation 'com.github.realdm.mpesasdk:core:0.0.4'
 ```
 Latest versions available in [Jitpack Repository](https://jitpack.io/#realdm/mpesasdk)
 
@@ -164,7 +164,7 @@ Payment Failure
 #### Download
 Add a gradle dependency to your project:
 ```groovy
-implementation 'com.github.realdm.mpesasdk:ui:0.0.1'
+implementation 'com.github.realdm.mpesasdk:ui:0.0.4'
 ```
 Latest versions available in [Jitpack Repository](https://jitpack.io/#realdm/mpesasdk)
 
