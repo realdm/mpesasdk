@@ -16,6 +16,7 @@ import mz.co.moovi.mpesalibui.payment.error.PaymentErrorCardViewState
 import mz.co.moovi.mpesalibui.ui.Action
 import mz.co.moovi.mpesalibui.ui.ViewAction
 import mz.co.moovi.mpesalibui.ui.ViewState
+import mz.co.moovi.mpesalibui.utils.ReferenceGenerator
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -151,6 +152,8 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
                     postErrorCardViewState(R.string.payment_response_ins_9)
                 }
             }
+            
+            thirdPartyReference = ReferenceGenerator.generateReference(transactionReference)
         }
     }
 
