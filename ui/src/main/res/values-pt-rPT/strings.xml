@@ -4,7 +4,7 @@
     <string name="payment_card_pay_button_text">Pague com o M-Pesa</string>
     <string name="payment_card_view_phone_number_prompt">Insira o número de telefone da sua conta M-Pesa</string>
     <string name="payment_authentication_card_title">Verifique o seu telefone</string>
-    <string name="payment_authentication_card_description">Uma notificação USSD foi enviada para o número: %s \n\nInsira o PIN do seu M-Pesa para completar a transação.</string>
+    <string name="payment_authentication_card_description">Uma notificação USSD foi enviada para o número: %s. Insira o PIN do seu M-Pesa para completar a transação.</string>
     <string name="payment_authentication_card_learn_more_button_text">Saiba mais</string>
     <string name="payment_authentication_card_timer_seconds_text">Segundos</string>
     <string name="payment_error_card_title">O Pagamento Falhou</string>
@@ -17,4 +17,5 @@
     <string name="payment_response_ins_9">A solicitação do pagamento atingiu o tempo limite porque o PIN de autorização não foi insirido a tempo.</string>
     <string name="payment_response_ins_2051">O pagamento falhou porque o número inserido não é uma conta M-Pesa válida.</string>
     <string name="payment_response_network_error">Não foi possível conectar-se à internet para processar o pagamento. Por favor, verifique a sua conexão com a Internet e tente novamente!</string>
+    <string name="payment_authentication_delay_information">Por favor, não saia desta janela enquanto o pagamento estiver sendo processado. Devido ao volume de transações ou à disponibilidade de sua rede, pode levar até 1 ou 2 minutos para concluir a transação.</string>
 </resources>

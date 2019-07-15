@@ -10,10 +10,13 @@
     <string name="payment_card_view_phone_number_prompt">Insert your M-Pesa account phone number</string>
 
     <!-- Authorizing Payment Card-->
-    <string name="payment_authentication_card_title">Check your phone</string>
+    <string name="payment_authentication_card_title">Authorizing Payment</string>
     <string name="payment_authentication_card_description">
-        An USSD notification was sent to the number: %s
-        \n\nInsert your m-mpesa pin to complete the transaction.
+        An USSD notification from Vodacom was sent to the number: %s. Insert your M-pesa pin to authorized the payment transaction.
+    </string>
+    <string name="payment_authentication_delay_information">
+        Please do not leave this screen while payment is being processed. Due to the volume of transactions or your network
+        availability it can take up to 1 minute or 2 to complete the transaction.
     </string>
     <string name="payment_authentication_card_learn_more_button_text">Learn more</string>
     <string name="payment_authentication_card_timer_seconds_text">Seconds</string>
