@@ -21,7 +21,7 @@ class MpesaRepositoryImpl(private val config: MpesaConfig) : MpesaRepository {
 
     private val retrofit by lazy {
         val okHttp = OkHttpClient.Builder()
-                .readTimeout(TIME_OUT_IN_MILLIS, TimeUnit.SECONDS)
+                .readTimeout(Integer.MAX_VALUE.toLong(), TimeUnit.MILLISECONDS)
                 .build()
 
         Retrofit.Builder()

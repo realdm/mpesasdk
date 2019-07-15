@@ -16,10 +16,10 @@ class MainActivity : AppCompatActivity() {
         MpesaSdk.init(
                 apiKey = "your_api_key_here",
                 publicKey = """your_public_key_here""",
-                endpointUrl = "your_endpoint_url_here",
-                serviceProviderName = "your_service_name_here",
-                serviceProviderCode = "your_service_provide_code_here",
-                serviceProviderLogoUrl = "https://www.vodacom.co.za/vodacom/home/images/header/vodacom_icon.77b545abd1d7a4e0808b5a2255438f64.png")
+                endpointUrl = MpesaSdk.SANDBOX_BASE_URL,
+                serviceProviderName = "Spreepass",
+                serviceProviderCode = "your_short_code_here",
+                serviceProviderLogoUrl = "https://bit.ly/30B9TYJ") // Spreepass logo
 
         MpesaSdk.pay(activity = this, requestCode = 1, amount = "1", transactionReference = "keep_changing_this_as_you_test")
     }
