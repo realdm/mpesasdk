@@ -5,7 +5,7 @@
     <!-- Make payment card -->
     <string name="payment_card_currency" translatable="false">Mt</string>
     <string name="payment_card_phone_number_hint" translatable="false">0001002</string>
-    <string name="payment_card_phone_number_prefix" translatable="false">+258 84</string>
+    <string name="payment_card_phone_number_prefix" translatable="false">+258 </string>
     <string name="payment_card_pay_button_text">Pay with M-pesa</string>
     <string name="payment_card_view_phone_number_prompt">Insert your M-Pesa account phone number</string>
 
