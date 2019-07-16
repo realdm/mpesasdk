@@ -100,11 +100,11 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
     }
 
     private fun hasValidPhoneNumber(): Boolean {
-        return !phoneNumber.isEmpty() && phoneNumber.length == 7
+        return !phoneNumber.isEmpty() && phoneNumber.length == 9
     }
 
     private fun onMakePayment() {
-        val viewState = PaymentAuthenticationCardViewState(phoneNumber = "(+258) 84$phoneNumber")
+        val viewState = PaymentAuthenticationCardViewState(phoneNumber = "(+258)$phoneNumber")
         _viewState.postValue(PaymentViewState(authenticationCard = viewState))
 
         val paymentRequest = createPaymentRequest()
