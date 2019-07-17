@@ -33,7 +33,6 @@ class PaymentFragment : Fragment() {
             val args = arguments!!
             val viewAction = PaymentViewAction.Init(amount = args.getString(ARG_TRANSACTION_AMOUNT),
                     serviceProviderCode = args.getString(ARG_SERVICE_PROVIDER_CODE),
-                    thirdPartyReference = args.getString(ARG_THIRD_PARTY_REFERENCE),
                     transactionReference = args.getString(ARG_TRANSACTION_REFERENCE),
                     serviceProviderName = args.getString(ARG_SERVICE_PROVIDER_NAME),
                     serviceProviderLogoUrl = args.getString(ARG_SERVICE_PROVIDER_LOGO_URL))

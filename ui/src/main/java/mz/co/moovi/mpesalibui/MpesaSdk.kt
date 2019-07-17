@@ -101,7 +101,6 @@ object MpesaSdk {
                 transactionReference = transactionReference,
                 serviceProviderName = serviceProviderName,
                 serviceProviderCode = serviceProviderCode,
-                serviceProviderLogoUrl = serviceProviderLogoUrl,
-                thirdPartyReference = ReferenceGenerator.generateReference(transactionReference))
+                serviceProviderLogoUrl = serviceProviderLogoUrl)
     }
 }

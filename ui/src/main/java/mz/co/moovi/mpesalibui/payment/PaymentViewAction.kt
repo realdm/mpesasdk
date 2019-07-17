@@ -11,7 +11,6 @@ sealed class PaymentViewAction : ViewAction {
     data class Init(
             val amount: String,
             val serviceProviderCode: String,
-            val thirdPartyReference: String,
             val transactionReference: String,
             val serviceProviderName: String,
             val serviceProviderLogoUrl: String) : PaymentViewAction()

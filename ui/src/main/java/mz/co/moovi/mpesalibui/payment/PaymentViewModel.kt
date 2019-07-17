@@ -68,7 +68,6 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
     private fun onInit(viewAction: PaymentViewAction.Init) {
         amount = viewAction.amount
         serviceProviderCode = viewAction.serviceProviderCode
-        thirdPartyReference = viewAction.thirdPartyReference
         serviceProviderName = viewAction.serviceProviderName
         transactionReference = viewAction.transactionReference
         serviceProviderLogoUrl = viewAction.serviceProviderLogoUrl
@@ -109,16 +108,16 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
 
         val paymentRequest = createPaymentRequest()
         disposable = mpesaService.pay(paymentRequest)
-            .subscribe { response, throwable -> handleResponse(response, throwable) }
+                .subscribe { response, throwable -> handleResponse(response, throwable) }
     }
 
     private fun createPaymentRequest(): PaymentRequest {
         return PaymentRequest(
                 input_Amount = amount,
-                input_CustomerMSISDN = "25884$phoneNumber",
-                input_ThirdPartyReference = thirdPartyReference,
+                input_CustomerMSISDN = "258$phoneNumber",
                 input_ServiceProviderCode = serviceProviderCode,
-                input_TransactionReference = transactionReference)
+                input_TransactionReference = transactionReference,
+                input_ThirdPartyReference = ReferenceGenerator.generateReference(transactionReference))
     }
 
     private fun handleResponse(response: PaymentResponse?, throwable: Throwable?) {
@@ -152,7 +151,7 @@ class PaymentViewModel(private val mpesaService: MpesaService) : ViewModel() {
                     postErrorCardViewState(R.string.payment_response_ins_9)
                 }
             }
-            
+
             thirdPartyReference = ReferenceGenerator.generateReference(transactionReference)
         }
     }
