@@ -170,6 +170,11 @@ Latest versions available in [Jitpack Repository](https://jitpack.io/#realdm/mpe
 
 ----
 
+#### Contributing
+Contributions are welcome. Please read the [contributing guide](CONTRIBUTING.md) for more information.
+
+----
+
 ### MIT LICENSE
 ```
 Copyright 2018 Dario Mungoi
