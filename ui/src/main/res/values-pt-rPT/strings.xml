@@ -18,4 +18,6 @@
     <string name="payment_response_ins_2051">O pagamento falhou porque o número inserido não é uma conta M-Pesa válida.</string>
     <string name="payment_response_network_error">Não foi possível conectar-se à internet para processar o pagamento. Por favor, verifique a sua conexão com a Internet e tente novamente!</string>
     <string name="payment_authentication_delay_information">Por favor, não saia desta janela enquanto o pagamento estiver sendo processado. Devido ao volume de transações ou à disponibilidade de sua rede, pode levar até 1 ou 2 minutos para concluir a transação.</string>
+    <string name="mock_pin_auth_dialog_cancel_button">Cancelar</string>
+    <string name="mock_pin_auth_dialog_send_button">Enviar</string>
 </resources>

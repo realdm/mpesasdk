@@ -1,17 +1,33 @@
 package mz.co.moovi.mpesalibui.extensions
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import mz.co.moovi.mpesalibui.payment.PaymentViewModel
-import mz.co.moovi.mpesalibui.utils.Injector
 
-inline fun <reified T : ViewModel> Fragment.provideViewModel(): T {
-    val factory = object : ViewModelProvider.Factory {
+fun <T : ViewModel> provideViewModel(scope: Fragment, initializer: () -> T): T {
+    val vm = initializer.invoke()
+    return ViewModelProviders.of(scope, vm.factory()).get(vm.javaClass)
+}
+
+fun <T : ViewModel> provideViewModel(scope: FragmentActivity, initializer: () -> T): T {
+    val vm = initializer.invoke()
+    return ViewModelProviders.of(scope, vm.factory()).get(vm.javaClass)
+}
+
+inline fun <reified T : ViewModel> provideParentViewModel(scope: Fragment): T {
+    return ViewModelProviders.of(scope.requireActivity()).get(T::class.java)
+}
+
+fun ViewModel.factory(): ViewModelProvider.Factory {
+    return object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return PaymentViewModel(Injector.mPesaService()) as T
+            return this@factory as T
         }
     }
-    return ViewModelProviders.of(this, factory).get(T::class.java)
+}
+
+inline fun <reified FM : ViewModel> Fragment.provideFlowModel(): FM {
+    return ViewModelProviders.of(this.requireActivity()).get(FM::class.java)
 }

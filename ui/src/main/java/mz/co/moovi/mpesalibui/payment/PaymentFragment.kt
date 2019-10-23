@@ -3,9 +3,15 @@ package mz.co.moovi.mpesalibui.payment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_payment.toolbar
@@ -13,13 +19,14 @@ import mz.co.moovi.mpesalibui.MpesaSdk
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_CODE
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_LOGO_URL
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_NAME
-import mz.co.moovi.mpesalibui.MpesaSdk.ARG_THIRD_PARTY_REFERENCE
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_TRANSACTION_AMOUNT
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_TRANSACTION_REFERENCE
 import mz.co.moovi.mpesalibui.R
 import mz.co.moovi.mpesalibui.extensions.provideViewModel
+import mz.co.moovi.mpesalibui.payment.devtools.MockAuthPaymentViewModel
 import mz.co.moovi.mpesalibui.ui.Action
 import mz.co.moovi.mpesalibui.ui.ViewState
+import mz.co.moovi.mpesalibui.utils.Injector
 import kotlinx.android.synthetic.main.fragment_payment.payment_authentication_card as authCard
 import kotlinx.android.synthetic.main.fragment_payment.payment_error_card as errorCard
 import kotlinx.android.synthetic.main.fragment_payment.start_payment_card as paymentCard
@@ -29,14 +36,19 @@ import kotlinx.android.synthetic.main.view_payment_card.view.pay_button as payBu
 class PaymentFragment : Fragment() {
 
     private val viewModel by lazy {
-        provideViewModel<PaymentViewModel>().apply {
-            val args = arguments!!
-            val viewAction = PaymentViewAction.Init(amount = args.getString(ARG_TRANSACTION_AMOUNT),
-                    serviceProviderCode = args.getString(ARG_SERVICE_PROVIDER_CODE),
-                    transactionReference = args.getString(ARG_TRANSACTION_REFERENCE),
-                    serviceProviderName = args.getString(ARG_SERVICE_PROVIDER_NAME),
-                    serviceProviderLogoUrl = args.getString(ARG_SERVICE_PROVIDER_LOGO_URL))
-            handleViewAction(viewAction)
+        provideViewModel(scope = this) {
+            val bundle = arguments!!
+            val args = PaymentArgs(
+                    amount = bundle.getString(ARG_TRANSACTION_AMOUNT),
+                    serviceProviderName = bundle.getString(ARG_SERVICE_PROVIDER_NAME),
+                    serviceProviderCode = bundle.getString(ARG_SERVICE_PROVIDER_CODE),
+                    transactionReference = bundle.getString(ARG_TRANSACTION_REFERENCE),
+                    serviceProviderLogoUrl = bundle.getString(ARG_SERVICE_PROVIDER_LOGO_URL))
+
+            when (MpesaSdk.hasMockAuthEnabled) {
+                true -> MockAuthPaymentViewModel(args)
+                else -> PaymentViewModel(Injector.mPesaService(), args)
+            }
         }
     }
 
@@ -52,19 +64,22 @@ class PaymentFragment : Fragment() {
 
     private fun handleAction(action: Action) {
         when (action) {
-            is PaymentViewModelAction.Cancel -> {
+            is PaymentAction.Cancel -> {
                 activity?.run {
                     setResult(Activity.RESULT_CANCELED)
                     finish()
                 }
             }
-            is PaymentViewModelAction.EnablePaymentButton -> {
+            is PaymentAction.EnablePaymentButton -> {
                 paymentCard.payButton.isEnabled = true
             }
-            is PaymentViewModelAction.DisablePaymentButton -> {
+            is PaymentAction.DisablePaymentButton -> {
                 paymentCard.payButton.isEnabled = false
             }
-            is PaymentViewModelAction.SendResult -> {
+            is PaymentAction.ShowMockPinDialog -> {
+                showMockDialog(action.providerName, amount = action.amount, transactionRef = action.reference)
+            }
+            is PaymentAction.SendResult -> {
                 val paymentStatus = action.paymentStatus
                 when (paymentStatus) {
                     is PaymentStatus.Success -> {
@@ -117,7 +132,55 @@ class PaymentFragment : Fragment() {
                 viewModel.handleViewAction(PaymentViewAction.Cancel)
             }
         }
+    }
 
+    /**
+     * Shows the Dialog that simulates the USSD Message sent by Vodacom
+     * Requesting for an Authentication PIN.
+     */
+    private fun showMockDialog(providerName: String, amount: String, transactionRef: String) {
+        val dialogBuilder = AlertDialog.Builder(requireContext()).apply {
+            val message = resources.getString(R.string.mock_pina_auth_dialog_mpes_message, amount, providerName, transactionRef)
+            setMessage(message)
+
+            val input = EditText(requireContext()).apply {
+                inputType = InputType.TYPE_NUMBER_VARIATION_PASSWORD
+            }
+
+            val container = LinearLayout(requireContext()).apply {
+                orientation = LinearLayout.VERTICAL
+                val margin = resources.getDimensionPixelSize(R.dimen.space_24dp)
+                val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                lp.setMargins(margin, margin, margin, margin)
+                input.layoutParams = lp
+                addView(input)
+            }
+
+            setView(container)
+
+            setPositiveButton(resources.getString(R.string.mock_pin_auth_dialog_send_button)) { dialog, _ ->
+                val pin = try {
+                    input.text.toString().toInt()
+                } catch (e: Exception) {
+                    -1
+                }
+                dialog.cancel()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    viewModel.handleViewAction(PaymentViewAction.ProcessMockPin(pin))
+                }, 2000)
+
+            }
+            setNegativeButton(resources.getString(R.string.mock_pin_auth_dialog_cancel_button)) { dialog, _ ->
+                dialog.cancel()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    viewModel.handleViewAction(PaymentViewAction.ProcessMockPin(-1))
+                }, 2000)
+            }
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            dialogBuilder.show()
+        }, 1500)
 
     }
 }

@@ -1,7 +1,7 @@
 package mz.co.moovi.mpesalibui.payment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import mz.co.moovi.mpesalibui.MpesaSdk
 import mz.co.moovi.mpesalibui.R
 
@@ -22,6 +22,7 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
