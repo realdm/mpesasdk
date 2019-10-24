@@ -6,12 +6,7 @@ sealed class PaymentViewAction : ViewAction {
     object Retry : PaymentViewAction()
     object Cancel : PaymentViewAction()
     object MakePayment : PaymentViewAction()
+    data class ProcessMockPin(val pin: Int?) : PaymentViewAction()
     data class ShowError(val messageResId: Int) : PaymentViewAction()
     data class AddPhoneNumber(val phoneNumber: String) : PaymentViewAction()
-    data class Init(
-            val amount: String,
-            val serviceProviderCode: String,
-            val transactionReference: String,
-            val serviceProviderName: String,
-            val serviceProviderLogoUrl: String) : PaymentViewAction()
 }

@@ -5,17 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import mz.co.moovi.mpesalibui.payment.PaymentActivity
-import mz.co.moovi.mpesalibui.utils.ReferenceGenerator
+import mz.co.moovi.mpesalibui.payment.devtools.MockAuthInfo
+import mz.co.moovi.mpesalibui.payment.devtools.MockAuthPin
 
 object MpesaSdk {
 
     const val ARG_RESULT_TRANSACTION_ID = "transaction_id"
     const val ARG_RESULT_CONVERSATION_ID = "conversation_id"
-
     const val ARG_SERVICE_PROVIDER_NAME = "arg_provider_name"
     const val ARG_SERVICE_PROVIDER_CODE = "arg_provider_code"
     const val ARG_TRANSACTION_AMOUNT = "arg_transaction_amount"
-    const val ARG_THIRD_PARTY_REFERENCE = "arg_third_party_reference"
     const val ARG_TRANSACTION_REFERENCE = "arg_transaction_reference"
     const val ARG_SERVICE_PROVIDER_LOGO_URL = "arg_service_provider_logo_urls"
 
@@ -23,6 +22,13 @@ object MpesaSdk {
     const val SANDBOX_BASE_URL = "https://api.sandbox.vm.co.mz:18346"
 
     private var initialized = false
+
+    private var _mockAuthInfo: MockAuthInfo? = null
+    val mockAuthInfo: MockAuthInfo?
+        get() = _mockAuthInfo
+
+    val hasMockAuthEnabled: Boolean
+        get() = mockAuthInfo != null
 
     private lateinit var _apiKey: String
     val apiKey: String
@@ -49,12 +55,12 @@ object MpesaSdk {
         get() = _publicKey
 
     fun init(
-        apiKey: String,
-        publicKey: String,
-        endpointUrl: String,
-        serviceProviderName: String,
-        serviceProviderCode: String,
-        serviceProviderLogoUrl: String
+            apiKey: String,
+            publicKey: String,
+            endpointUrl: String,
+            serviceProviderName: String,
+            serviceProviderCode: String,
+            serviceProviderLogoUrl: String
     ) {
 
         if (initialized) {
@@ -75,7 +81,7 @@ object MpesaSdk {
         }
 
         val intent = Intent(activity, PaymentActivity::class.java).apply {
-            val args = createPaymentBundle(amount, transactionReference)
+            val args = createPaymentBundle(amount = amount, transactionReference = transactionReference)
             putExtras(args)
         }
 
@@ -88,19 +94,27 @@ object MpesaSdk {
         }
 
         val intent = Intent(fragment.context, PaymentActivity::class.java).apply {
-            val args = createPaymentBundle(amount, transactionReference)
+            val args = createPaymentBundle(amount = amount, transactionReference = transactionReference)
             putExtras(args)
         }
 
         fragment.startActivityForResult(intent, requestCode)
     }
 
+    fun withMockAuthentication(pins: List<MockAuthPin>): MpesaSdk {
+        if (!initialized) {
+            throw IllegalArgumentException("SDK was not initialized")
+        }
+        _mockAuthInfo = MockAuthInfo(pins = pins)
+        return this
+    }
+
     private fun createPaymentBundle(amount: String, transactionReference: String): Bundle {
         return PaymentActivity.packArgs(
                 amount = amount,
-                transactionReference = transactionReference,
                 serviceProviderName = serviceProviderName,
                 serviceProviderCode = serviceProviderCode,
+                transactionReference = transactionReference,
                 serviceProviderLogoUrl = serviceProviderLogoUrl)
     }
 }

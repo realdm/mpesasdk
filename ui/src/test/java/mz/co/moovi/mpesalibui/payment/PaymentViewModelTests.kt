@@ -42,27 +42,38 @@ class PaymentViewModelTests {
 
     private lateinit var viewModel: PaymentViewModel
 
+    private val amount = "200"
+    private val serviceProviderCode = "171717"
+    private val transactionReference = "T2345CR"
+    private val serviceProviderName = "Service Provider Name"
+    private val serviceProviderLogoUrl = "service_provider_logo_url"
+
     @Before
     fun setup() {
-        viewModel = PaymentViewModel(mpesaService)
+        viewModel = PaymentViewModel(mpesaService, args = PaymentArgs(
+                amount = amount,
+                serviceProviderName = serviceProviderName,
+                serviceProviderCode = serviceProviderCode,
+                transactionReference = transactionReference,
+                serviceProviderLogoUrl = serviceProviderLogoUrl))
     }
 
     @Test
-    fun `on INIT view action emit a payment card view state`() {
+    fun `on init view action emit a payment card view state`() {
         init()
     }
 
     @Test
     fun `enable payment button when a valid number lenght is added`() {
-        val viewAction = PaymentViewAction.AddPhoneNumber(phoneNumber = "1112222")
+        val viewAction = PaymentViewAction.AddPhoneNumber(phoneNumber = "841112222")
         viewModel.handleViewAction(viewAction)
-        assertEquals(PaymentViewModelAction.EnablePaymentButton, getAction())
+        assertEquals(PaymentAction.EnablePaymentButton, getAction())
     }
 
     @Test
     fun `on make payment emit payment processing card view state`() {
         init()
-        val phoneNumber = "1112222"
+        val phoneNumber = "841112222"
         viewModel.handleViewAction(PaymentViewAction.AddPhoneNumber(phoneNumber = phoneNumber))
 
         doReturn(Single.just(successPaymentResponse)).whenever(mpesaService).pay(isA())
@@ -70,7 +81,7 @@ class PaymentViewModelTests {
 
         val expectedViewState = PaymentViewState(
                 authenticationCard = PaymentAuthenticationCardViewState(
-                        phoneNumber = "(+258) 84${phoneNumber}"
+                        phoneNumber = "(+258)$phoneNumber"
                 ))
         assertEquals(expectedViewState, getViewState())
     }
@@ -84,7 +95,7 @@ class PaymentViewModelTests {
         doReturn(Single.just(successPaymentResponse)).whenever(mpesaService).pay(isA())
         viewModel.handleViewAction(PaymentViewAction.MakePayment)
 
-        val expectedAction = PaymentViewModelAction.SendResult(
+        val expectedAction = PaymentAction.SendResult(
                 paymentStatus = PaymentStatus.Success(
                         transactionId = successPaymentResponse.output_TransactionID,
                         conversationId = successPaymentResponse.output_ConversationID))
@@ -121,24 +132,15 @@ class PaymentViewModelTests {
     }
 
     private fun init() {
-        val viewAction = PaymentViewAction.Init(
-                amount = "200",
-                serviceProviderCode = "171717",
-                transactionReference = "T2345CR",
-                serviceProviderName = "Service Provider Name",
-                thirdPartyReference = "third_party_reference",
-                serviceProviderLogoUrl = "service_provider_logo_url")
-
-        viewModel.handleViewAction(viewAction)
 
         val expectedViewState = PaymentViewState(paymentCard = PaymentCardViewState(
-                amount = viewAction.amount,
-                serviceProviderName = viewAction.serviceProviderName,
-                serviceProviderCode = viewAction.serviceProviderCode,
-                serviceProviderLogo = viewAction.serviceProviderLogoUrl))
+                amount =amount,
+                serviceProviderName = serviceProviderName,
+                serviceProviderCode = serviceProviderCode,
+                serviceProviderLogo = serviceProviderLogoUrl))
 
         assertEquals(expectedViewState, getViewState())
-        assertEquals(PaymentViewModelAction.DisablePaymentButton, getAction())
+        assertEquals(PaymentAction.DisablePaymentButton, getAction())
     }
 
     private fun getViewState(): ViewState {
