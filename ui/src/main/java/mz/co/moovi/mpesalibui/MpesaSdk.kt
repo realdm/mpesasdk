@@ -105,10 +105,6 @@ object MpesaSdk {
         if (!initialized) {
             throw IllegalArgumentException("SDK was not initialized")
         }
-
-        if (!BuildConfig.DEBUG) {
-            throw IllegalArgumentException("This mode should only be used in the debug build.")
-        }
         _mockAuthInfo = MockAuthInfo(pins = pins)
         return this
     }
