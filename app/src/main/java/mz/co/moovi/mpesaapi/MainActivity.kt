@@ -22,6 +22,30 @@ class MainActivity : AppCompatActivity() {
                 serviceProviderLogoUrl = "https://bit.ly/30B9TYJ") // Spreepass logo
 
         MpesaSdk.pay(activity = this, requestCode = 1, amount = "1", transactionReference = "keep_changing_this_as_you_test")
+
+        /**
+         * Initiate the B2C payment
+         * This is useful when you are an middle man service provider and once a user of your app as
+         * requested and paid the service {using the C2B payment above} and you want to transfer the
+         * funds to the company or person who really offer the service the user wants.
+         * i. e. after SpreePass sold ticket to the user, the app can immediately transfer the amount
+         * to the Organize of the event
+         *
+         *
+         */
+        MpesaSdk.init(
+                apiKey = "your_api_key",
+                publicKey = "public_key",
+                endpointUrl = MpesaSdk.SANDBOX_B2C_URL,
+                serviceProviderName = "YourCompanyHere. i.e: SpreePass",
+                serviceProviderCode = "company_short_code",
+                serviceProviderLogoUrl = "url_to_your_logo",
+                amount = "1993",
+                companyMSIDN = "258850000111"
+        )
+
+        MpesaSdk.payB2C(transactionReference = "change_this_as_you_send_the_request")
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

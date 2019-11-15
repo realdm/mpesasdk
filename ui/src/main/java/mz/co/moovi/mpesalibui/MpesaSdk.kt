@@ -1,9 +1,13 @@
 package mz.co.moovi.mpesalibui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import mz.co.moovi.mpesalib.api.MpesaMpesaServiceImpl
+import mz.co.moovi.mpesalib.api.MpesaService
+import mz.co.moovi.mpesalib.api.PaymentRequest
 import mz.co.moovi.mpesalibui.payment.PaymentActivity
 import mz.co.moovi.mpesalibui.utils.ReferenceGenerator
 
@@ -21,8 +25,12 @@ object MpesaSdk {
 
     const val PRODUCTION_BASE_URL = "https://api.vm.co.mz:18346"
     const val SANDBOX_BASE_URL = "https://api.sandbox.vm.co.mz:18346"
+    // B2C base url
+    const val SANDBOX_B2C_URL = "https://api.sandbox.vm.co.mz:18345"
 
     private var initialized = false
+
+    private lateinit var mpesaService: MpesaService
 
     private lateinit var _apiKey: String
     val apiKey: String
@@ -48,13 +56,21 @@ object MpesaSdk {
     val publicKey: String
         get() = _publicKey
 
+    private lateinit var _amout: String
+    val amount: String
+        get() = _amout
+
+    private lateinit var _companyMSIDN: String
+    val companyMSIDN: String
+        get() = _companyMSIDN
+
     fun init(
-        apiKey: String,
-        publicKey: String,
-        endpointUrl: String,
-        serviceProviderName: String,
-        serviceProviderCode: String,
-        serviceProviderLogoUrl: String
+            apiKey: String,
+            publicKey: String,
+            endpointUrl: String,
+            serviceProviderName: String,
+            serviceProviderCode: String,
+            serviceProviderLogoUrl: String
     ) {
 
         if (initialized) {
@@ -66,6 +82,27 @@ object MpesaSdk {
         _serviceProviderCode = serviceProviderCode
         _serviceProviderName = serviceProviderName
         _serviceProviderLogoUrl = serviceProviderLogoUrl
+        initialized = true
+    }
+
+    fun init(
+            apiKey: String,
+            publicKey: String,
+            endpointUrl: String,
+            serviceProviderName: String,
+            serviceProviderCode: String,
+            serviceProviderLogoUrl: String,
+            amount: String,
+            companyMSIDN: String
+    ) {
+        _apiKey = apiKey
+        _publicKey = publicKey
+        _endpointUrl = endpointUrl
+        _serviceProviderCode = serviceProviderCode
+        _serviceProviderName = serviceProviderName
+        _serviceProviderLogoUrl = serviceProviderLogoUrl
+        _amout = amount
+        _companyMSIDN = companyMSIDN
         initialized = true
     }
 
@@ -102,5 +139,23 @@ object MpesaSdk {
                 serviceProviderName = serviceProviderName,
                 serviceProviderCode = serviceProviderCode,
                 serviceProviderLogoUrl = serviceProviderLogoUrl)
+    }
+
+    /**
+     * B2C payment
+     * [transactionReference] transaction reference
+     */
+    fun payB2C(transactionReference: String) {
+        // Pack the needed info for the payment request
+        val request = PaymentRequest(
+                input_Amount = _amout,
+                input_CustomerMSISDN = _companyMSIDN,
+                input_ServiceProviderCode = _serviceProviderCode,
+                input_TransactionReference = transactionReference,
+                input_ThirdPartyReference = ReferenceGenerator.generateReference(transactionReference)
+        )
+
+        // Make the request
+        mpesaService.payB2C(request = request)
     }
 }

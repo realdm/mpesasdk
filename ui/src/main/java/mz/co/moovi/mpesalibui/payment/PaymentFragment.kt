@@ -13,7 +13,6 @@ import mz.co.moovi.mpesalibui.MpesaSdk
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_CODE
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_LOGO_URL
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_NAME
-import mz.co.moovi.mpesalibui.MpesaSdk.ARG_THIRD_PARTY_REFERENCE
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_TRANSACTION_AMOUNT
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_TRANSACTION_REFERENCE
 import mz.co.moovi.mpesalibui.R
@@ -35,7 +34,8 @@ class PaymentFragment : Fragment() {
                     serviceProviderCode = args.getString(ARG_SERVICE_PROVIDER_CODE),
                     transactionReference = args.getString(ARG_TRANSACTION_REFERENCE),
                     serviceProviderName = args.getString(ARG_SERVICE_PROVIDER_NAME),
-                    serviceProviderLogoUrl = args.getString(ARG_SERVICE_PROVIDER_LOGO_URL))
+                    serviceProviderLogoUrl = args.getString(ARG_SERVICE_PROVIDER_LOGO_URL),
+                    thirdPartyReference = "third_party_reference")
             handleViewAction(viewAction)
         }
     }

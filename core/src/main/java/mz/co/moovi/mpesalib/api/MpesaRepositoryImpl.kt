@@ -41,4 +41,7 @@ class MpesaRepositoryImpl(private val config: MpesaConfig) : MpesaRepository {
         return mPesaApi.pay(paymentRequest = paymentRequest, bearerToken = bearerToken)
                 .async(subscribeOn = Schedulers.newThread(), observeOn = AndroidSchedulers.mainThread())
     }
+
+    override fun payB2C(request: PaymentRequest): Single<PaymentResponse> =
+            mPesaApi.payB2C(bearer = "Bearer ${KeyGenerator(config = config).bearerToken}", request = request)
 }
