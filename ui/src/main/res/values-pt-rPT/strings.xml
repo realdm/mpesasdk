@@ -13,9 +13,11 @@
     <string name="payment_response_ins_unhandled_response">Algo deu errado ao processar o seu pagamento.</string>
     <string name="payment_response_ins_2006">O pagamento falhou devido ao saldo insuficiente na sua conta.</string>
     <string name="payment_response_ins_5">Pagamento cancelado. Tente novamente se quiser alterar o número da conta M-Pesa.</string>
-    <string name="payment_response_ins_4">Pagamento falhou. O número de telefone inserido não tem uma conta M-Pesa válida.</string>
+    <string name="payment_response_ins_4">O pagamento falhou. O número de telefone inserido não tem uma conta M-Pesa válida.</string>
     <string name="payment_response_ins_9">A solicitação do pagamento atingiu o tempo limite porque o PIN de autorização não foi insirido a tempo.</string>
+    <string name="payment_response_ins_10">O pagamento falhou. Foi detectada transação duplicada.</string>
     <string name="payment_response_ins_2051">O pagamento falhou porque o número inserido não é uma conta M-Pesa válida.</string>
     <string name="payment_response_network_error">Não foi possível conectar-se à internet para processar o pagamento. Por favor, verifique a sua conexão com a Internet e tente novamente!</string>
     <string name="payment_authentication_delay_information">Por favor, não saia desta janela enquanto o pagamento estiver sendo processado. Devido ao volume de transações ou à disponibilidade de sua rede, pode levar até 1 ou 2 minutos para concluir a transação.</string>
+    <string name="payment_response_http_error">Não foi possível conectar-se à Vodacom para processar o pagamento. Por favor tente mais tarde!</string>
 </resources>

@@ -25,17 +25,16 @@ import kotlinx.android.synthetic.main.fragment_payment.payment_error_card as err
 import kotlinx.android.synthetic.main.fragment_payment.start_payment_card as paymentCard
 import kotlinx.android.synthetic.main.view_payment_card.view.pay_button as payButton
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PaymentFragment : Fragment() {
 
     private val viewModel by lazy {
         provideViewModel<PaymentViewModel>().apply {
-            val args = arguments!!
-            val viewAction = PaymentViewAction.Init(amount = args.getString(ARG_TRANSACTION_AMOUNT),
-                    serviceProviderCode = args.getString(ARG_SERVICE_PROVIDER_CODE),
-                    transactionReference = args.getString(ARG_TRANSACTION_REFERENCE),
-                    serviceProviderName = args.getString(ARG_SERVICE_PROVIDER_NAME),
-                    serviceProviderLogoUrl = args.getString(ARG_SERVICE_PROVIDER_LOGO_URL))
+            val viewAction = PaymentViewAction.Init(amount = arguments!!.getString(ARG_TRANSACTION_AMOUNT)!!,
+                    serviceProviderCode = arguments!!.getString(ARG_SERVICE_PROVIDER_CODE)!!,
+                    transactionReference = arguments!!.getString(ARG_TRANSACTION_REFERENCE)!!,
+                    thirdPartyReference = arguments!!.getString(ARG_THIRD_PARTY_REFERENCE)!!,
+                    serviceProviderName = arguments!!.getString(ARG_SERVICE_PROVIDER_NAME)!!,
+                    serviceProviderLogoUrl = arguments!!.getString(ARG_SERVICE_PROVIDER_LOGO_URL)!!)
             handleViewAction(viewAction)
         }
     }
@@ -65,13 +64,16 @@ class PaymentFragment : Fragment() {
                 paymentCard.payButton.isEnabled = false
             }
             is PaymentViewModelAction.SendResult -> {
-                val paymentStatus = action.paymentStatus
-                when (paymentStatus) {
+                when (action.paymentStatus) {
                     is PaymentStatus.Success -> {
                         val intent = Intent().apply {
                             val bundle = Bundle().apply {
-                                putString(MpesaSdk.ARG_RESULT_TRANSACTION_ID, paymentStatus.transactionId)
-                                putString(MpesaSdk.ARG_RESULT_CONVERSATION_ID, paymentStatus.conversationId)
+                                putString(MpesaSdk.ARG_RESULT_TRANSACTION_ID,
+                                        action.paymentStatus.transactionId)
+                                putString(MpesaSdk.ARG_RESULT_CONVERSATION_ID,
+                                        action.paymentStatus.conversationId)
+                                putString(MpesaSdk.ARG_RESULT_THIRD_PARTY_REFERENCE,
+                                        action.paymentStatus.thirdPartyReference)
                             }
                             putExtras(bundle)
                         }
@@ -81,7 +83,6 @@ class PaymentFragment : Fragment() {
                         }
                     }
                 }
-
             }
         }
     }
@@ -110,7 +111,7 @@ class PaymentFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        toolbar.let { it ->
+        toolbar.let {
             it.title = resources.getString(R.string.payment_activity_toolbar_title)
             it.setNavigationIcon(R.drawable.ic_close_24dp)
             it.setNavigationOnClickListener {
