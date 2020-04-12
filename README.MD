@@ -39,7 +39,8 @@ val paymentRequest = PaymentRequest(
    input_CustomerMSISDN = "25884$phoneNumber",
    input_ThirdPartyReference = thirdPartyReference,
    input_ServiceProviderCode = serviceProviderCode,
-   input_TransactionReference = transactionReference)
+   input_TransactionReference = transactionReference,
+   input_ThirdPartyReference = thirdPartyReference)
 ```
 
 ##### Perform the network call
@@ -75,13 +76,17 @@ private fun handleResponse(response: PaymentResponse?, throwable: Throwable?) {
            }
        }
    }
-} 
+}
 ```
+
+#### Logging HTTP Request and Response
+It's possible to set an [OkHttpLoggingInterceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor)
+in the `MpesaConfig()` constructor so that payment request and response can be logged.
 
 #### Download
 Add a gradle dependency to your project:
 ```groovy
-implementation 'com.github.realdm.mpesasdk:core:0.0.4'
+implementation 'com.github.realdm.mpesasdk:core:0.0.8'
 ```
 Latest versions available in [Jitpack Repository](https://jitpack.io/#realdm/mpesasdk)
 
@@ -107,10 +112,10 @@ MpesaSdk.init(
 ```
 
 Note: The endpoint url's for the sandbox and production environment are constants in the MpesaSdk with the names
-      SANDBOX_BASE_URL and PRODUCTION_BASE_URL respectively.  
+      SANDBOX_BASE_URL and PRODUCTION_BASE_URL respectively.
 
 #### Make Payment
-Make the payment by calling the `pay` provided by the M-pesa sdk. 
+Make the payment by calling the `pay` provided by the M-pesa sdk.
 This method call will start an activity for result that will show the M-Pesa payment Ui to process
 the payment and send a result back when it is done.
 
@@ -122,7 +127,7 @@ The transaction reference will uniquely identify the product or service being pa
 
 ##### Make the payment call
 ```kotlin
-MpesaSdk.pay(activity = this,requestCode = 1, amount = "1", transactionReference = "T12335C")
+MpesaSdk.pay(activity = this,requestCode = 1, amount = "1", transactionReference = "T12335C", thirdPartyReference = "12345")
 ```
 
 ##### Handle the result
@@ -134,8 +139,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
          1 -> {
               when(resultCode) {
                    Activity.RESULT_OK -> {
-                        val transactionId = data?.extras.getString(MpesaSdk.ARG_RESULT_TRANSACTION_ID)
-                        val conversationId = data?.extras.getString(MpesaSdk.ARG_RESULT_CONVERSATION_ID)
+                        val transactionId = data?.extras?.getString(MpesaSdk.ARG_RESULT_TRANSACTION_ID)
+					   	val conversationId = data?.extras?.getString(MpesaSdk.ARG_RESULT_CONVERSATION_ID)
+					    val thirdPartyReference = data?.extras?.getString(MpesaSdk.ARG_THIRD_PARTY_REFERENCE)
                         //Do Something
                    }
                    Activity.RESULT_CANCELED -> {
@@ -146,6 +152,10 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     }
 }
 ```
+
+#### Logging HTTP Request and Response
+It's possible to set an [OkHttpLoggingInterceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor)
+in the `MpesaSdk.init()` method so that payment request and response can be logged.
 
 ### Screenshots
 
@@ -164,7 +174,7 @@ Payment Failure
 #### Download
 Add a gradle dependency to your project:
 ```groovy
-implementation 'com.github.realdm.mpesasdk:ui:0.0.4'
+implementation 'com.github.realdm.mpesasdk:ui:0.0.8'
 ```
 Latest versions available in [Jitpack Repository](https://jitpack.io/#realdm/mpesasdk)
 

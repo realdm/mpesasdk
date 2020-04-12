@@ -12,6 +12,7 @@ sealed class PaymentViewAction : ViewAction {
             val amount: String,
             val serviceProviderCode: String,
             val transactionReference: String,
+            val thirdPartyReference: String,
             val serviceProviderName: String,
             val serviceProviderLogoUrl: String) : PaymentViewAction()
 }

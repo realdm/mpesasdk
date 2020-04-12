@@ -11,13 +11,15 @@ class PaymentActivity : AppCompatActivity() {
         fun packArgs(amount: String,
                      serviceProviderName: String,
                      serviceProviderCode: String,
-                     transactionReference: String, serviceProviderLogoUrl: String): Bundle {
+                     transactionReference: String,
+                     thirdPartyReference: String, serviceProviderLogoUrl: String): Bundle {
 
             return Bundle().apply {
                 putString(MpesaSdk.ARG_TRANSACTION_AMOUNT, amount)
                 putString(MpesaSdk.ARG_SERVICE_PROVIDER_NAME, serviceProviderName)
                 putString(MpesaSdk.ARG_SERVICE_PROVIDER_CODE, serviceProviderCode)
                 putString(MpesaSdk.ARG_TRANSACTION_REFERENCE, transactionReference)
+                putString(MpesaSdk.ARG_THIRD_PARTY_REFERENCE, thirdPartyReference)
                 putString(MpesaSdk.ARG_SERVICE_PROVIDER_LOGO_URL, serviceProviderLogoUrl)
             }
         }
