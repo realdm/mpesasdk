@@ -28,7 +28,7 @@ class PaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_payment)
+        setContentView(R.layout.mpesa_sdk_activity_payment)
         val fragment = C2BPaymentFragment().apply {
             arguments = intent.extras
         }

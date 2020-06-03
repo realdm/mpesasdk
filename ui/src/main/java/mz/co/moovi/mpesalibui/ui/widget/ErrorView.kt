@@ -7,14 +7,14 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.view.isGone
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.view_error.view.*
+import kotlinx.android.synthetic.main.mpesa_sdk_view_error.view.*
 import mz.co.moovi.mpesalibui.R
-import kotlinx.android.synthetic.main.view_error.view.action_button as actionButton
+import kotlinx.android.synthetic.main.mpesa_sdk_view_error.view.action_button as actionButton
 
 class ErrorView(context: Context, attributeSet: AttributeSet) : FrameLayout(context, attributeSet) {
 
     init {
-        inflate(context, R.layout.view_error, this)
+        inflate(context, R.layout.mpesa_sdk_view_error, this)
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     }
 
