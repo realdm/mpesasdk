@@ -18,4 +18,13 @@
     <string name="payment_response_ins_2051">O pagamento falhou porque o número inserido não é uma conta M-Pesa válida.</string>
     <string name="payment_response_network_error">Não foi possível conectar-se à internet para processar o pagamento. Por favor, verifique a sua conexão com a Internet e tente novamente!</string>
     <string name="payment_authentication_delay_information">Por favor, não saia desta janela enquanto o pagamento estiver sendo processado. Devido ao volume de transações ou à disponibilidade de sua rede, pode levar até 1 ou 2 minutos para concluir a transação.</string>
+    <string name="c2b_payment_retry_button">Tentar novamente</string>
+    <string name="c2b_payment_failure_generic_error_title">O pagamento falhou</string>
+    <string name="c2b_payment_network_error_title">Não está conectado à internet</string>
+    <string name="c2b_payment_network_error_description">Verifique sua conexão com a Internet e tente novamente.</string>
+    <string name="c2b_payment_authentication_error_title">Autenticação inválida</string>
+    <string name="c2b_payment_authentication_error_description">Não foi possível autenticar seu pagamento. Tente novamente e verifique se o número e o PIN estão corretos.</string>
+    <string name="c2b_payment_insufficient_balance_error_title">Saldo insuficiente</string>
+    <string name="c2b_payment_isufficient_balance_error_description">Não foi possível processar seu pagamento devido a saldo insuficiente na conta</string>
+    <string name="c2b_payment_failure_generic_error_description">We couldn\'t process your payment through M-Pesa at the moment. Please try again later</string>
 </resources>

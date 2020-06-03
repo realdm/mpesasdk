@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/title"
@@ -17,24 +17,29 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:text="@string/payment_authentication_card_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/animation_view"
             tools:text="@string/payment_authentication_card_title" />
 
         <TextView
-            android:id="@+id/error_message"
+            android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="@string/payment_authentication_card_description" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -50,22 +55,6 @@
             app:lottie_autoPlay="true"
             app:lottie_fileName="7337-credit-card-check-animation.json"
             app:lottie_loop="true" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="@string/payment_authentication_delay_information"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/error_message" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

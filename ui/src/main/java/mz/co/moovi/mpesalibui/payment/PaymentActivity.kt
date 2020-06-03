@@ -1,17 +1,20 @@
 package mz.co.moovi.mpesalibui.payment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import mz.co.moovi.mpesalibui.MpesaSdk
 import mz.co.moovi.mpesalibui.R
+import mz.co.moovi.mpesalibui.payment.c2b.C2BPaymentFragment
 
 class PaymentActivity : AppCompatActivity() {
 
     companion object {
-        fun packArgs(amount: String,
-                     serviceProviderName: String,
-                     serviceProviderCode: String,
-                     transactionReference: String, serviceProviderLogoUrl: String): Bundle {
+        fun packArgs(
+            amount: String,
+            serviceProviderName: String,
+            serviceProviderCode: String,
+            transactionReference: String, serviceProviderLogoUrl: String
+        ): Bundle {
 
             return Bundle().apply {
                 putString(MpesaSdk.ARG_TRANSACTION_AMOUNT, amount)
@@ -22,14 +25,13 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
-
-        val fragment = PaymentFragment().apply {
+        val fragment = C2BPaymentFragment().apply {
             arguments = intent.extras
         }
-
         supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
     }
 }
