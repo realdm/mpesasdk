@@ -1,7 +1,8 @@
 package mz.co.moovi.mpesalib.api
 
-import io.reactivex.Single
+import mz.co.moovi.mpesalib.api.c2b.C2BPaymentRequest
+import mz.co.moovi.mpesalib.api.c2b.C2BPaymentResponse
 
 interface MpesaService {
-    fun pay(paymentRequest: PaymentRequest): Single<PaymentResponse>
+    suspend fun c2bPayment(paymentRequest: C2BPaymentRequest): Response<C2BPaymentResponse>
 }

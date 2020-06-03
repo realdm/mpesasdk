@@ -7,13 +7,16 @@ import com.nhaarman.mockitokotlin2.isA
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Single
 import mz.co.moovi.mpesalib.api.MpesaService
-import mz.co.moovi.mpesalib.api.PaymentResponse
+import mz.co.moovi.mpesalib.api.c2b.C2BPaymentResponse
 import mz.co.moovi.mpesalibui.R
 import mz.co.moovi.mpesalibui.extensions.getFixture
 import mz.co.moovi.mpesalibui.extensions.getHttpErrorFixture
 import mz.co.moovi.mpesalibui.payment.authentication.PaymentAuthenticationCardViewState
+import mz.co.moovi.mpesalibui.payment.c2b.C2BPaymentEvent
+import mz.co.moovi.mpesalibui.payment.c2b.C2BPaymentViewModel
+import mz.co.moovi.mpesalibui.payment.c2b.C2BPaymentViewAction
 import mz.co.moovi.mpesalibui.payment.error.PaymentErrorCardViewState
-import mz.co.moovi.mpesalibui.ui.Action
+import mz.co.moovi.mpesalibui.ui.Event
 import mz.co.moovi.mpesalibui.ui.ViewState
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -29,22 +32,23 @@ import java.net.UnknownHostException
 class PaymentViewModelTests {
 
     companion object {
-        private val successPaymentResponse = "responses/payment/PaymentResponse_Success_ISN_0".getFixture<PaymentResponse>()
-        private val timeOutPaymentResponse = "responses/payment/PaymentResponse_Error_ISN_9".getHttpErrorFixture<PaymentResponse>(408)
+        private val successPaymentResponse = "responses/payment/PaymentResponse_Success_ISN_0".getFixture<C2BPaymentResponse>()
+        private val timeOutPaymentResponse = "responses/payment/PaymentResponse_Error_ISN_9".getHttpErrorFixture<C2BPaymentResponse>(408)
     }
 
     @get:Rule val mockitorule = MockitoJUnit.rule()
     @get:Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock private lateinit var mpesaService: MpesaService
-    @Mock private lateinit var actionObserver: Observer<Action>
+    @Mock private lateinit var actionObserver: Observer<Event>
     @Mock private lateinit var viewStateObserver: Observer<ViewState>
 
-    private lateinit var viewModel: PaymentViewModel
+    private lateinit var viewModel: C2BPaymentViewModel
 
     @Before
     fun setup() {
-        viewModel = PaymentViewModel(mpesaService)
+        viewModel =
+            C2BPaymentViewModel(mpesaService)
     }
 
     @Test
@@ -54,19 +58,19 @@ class PaymentViewModelTests {
 
     @Test
     fun `enable payment button when a valid number lenght is added`() {
-        val viewAction = PaymentViewAction.AddPhoneNumber(phoneNumber = "1112222")
+        val viewAction = C2BPaymentViewAction.AddPhoneNumber(phoneNumber = "1112222")
         viewModel.handleViewAction(viewAction)
-        assertEquals(PaymentViewModelAction.EnablePaymentButton, getAction())
+        assertEquals(C2BPaymentEvent.EnablePaymentButton, getAction())
     }
 
     @Test
     fun `on make payment emit payment processing card view state`() {
         init()
         val phoneNumber = "1112222"
-        viewModel.handleViewAction(PaymentViewAction.AddPhoneNumber(phoneNumber = phoneNumber))
+        viewModel.handleViewAction(C2BPaymentViewAction.AddPhoneNumber(phoneNumber = phoneNumber))
 
-        doReturn(Single.just(successPaymentResponse)).whenever(mpesaService).pay(isA())
-        viewModel.handleViewAction(PaymentViewAction.MakePayment)
+        doReturn(Single.just(successPaymentResponse)).whenever(mpesaService).c2bPayment(isA())
+        viewModel.handleViewAction(C2BPaymentViewAction.PayButtonPressed)
 
         val expectedViewState = PaymentViewState(
                 authenticationCard = PaymentAuthenticationCardViewState(
@@ -79,15 +83,15 @@ class PaymentViewModelTests {
     fun `on make payment successfully emit success result`() {
         init()
         val phoneNumber = "1112222"
-        viewModel.handleViewAction(PaymentViewAction.AddPhoneNumber(phoneNumber = phoneNumber))
+        viewModel.handleViewAction(C2BPaymentViewAction.AddPhoneNumber(phoneNumber = phoneNumber))
 
-        doReturn(Single.just(successPaymentResponse)).whenever(mpesaService).pay(isA())
-        viewModel.handleViewAction(PaymentViewAction.MakePayment)
+        doReturn(Single.just(successPaymentResponse)).whenever(mpesaService).c2bPayment(isA())
+        viewModel.handleViewAction(C2BPaymentViewAction.PayButtonPressed)
 
-        val expectedAction = PaymentViewModelAction.SendResult(
-                paymentStatus = PaymentStatus.Success(
-                        transactionId = successPaymentResponse.output_TransactionID,
-                        conversationId = successPaymentResponse.output_ConversationID))
+        val expectedAction = C2BPaymentEvent.SetResult(
+                paymentStatus = PaymentResult.Success(
+                        transactionId = successPaymentResponse.transactionId,
+                        conversationId = successPaymentResponse.conversationId))
         assertEquals(expectedAction, getAction())
     }
 
@@ -95,10 +99,10 @@ class PaymentViewModelTests {
     fun `on make payment with a network error emit error card view state`() {
         init()
         val phoneNumber = "1112222"
-        viewModel.handleViewAction(PaymentViewAction.AddPhoneNumber(phoneNumber = phoneNumber))
+        viewModel.handleViewAction(C2BPaymentViewAction.AddPhoneNumber(phoneNumber = phoneNumber))
 
-        doReturn(Single.error<PaymentResponse>(UnknownHostException())).whenever(mpesaService).pay(isA())
-        viewModel.handleViewAction(PaymentViewAction.MakePayment)
+        doReturn(Single.error<C2BPaymentResponse>(UnknownHostException())).whenever(mpesaService).c2bPayment(isA())
+        viewModel.handleViewAction(C2BPaymentViewAction.PayButtonPressed)
 
         val expectedViewState = PaymentViewState(errorCard = PaymentErrorCardViewState(
                 messageResId = R.string.payment_response_network_error))
@@ -109,11 +113,11 @@ class PaymentViewModelTests {
     fun `on time out to authenticate payment emit error card view state`() {
         init()
 
-        val viewAction = PaymentViewAction.AddPhoneNumber(phoneNumber = "1112222")
+        val viewAction = C2BPaymentViewAction.AddPhoneNumber(phoneNumber = "1112222")
         viewModel.handleViewAction(viewAction)
 
-        doReturn(Single.error<PaymentResponse>(timeOutPaymentResponse)).whenever(mpesaService).pay(isA())
-        viewModel.handleViewAction(PaymentViewAction.MakePayment)
+        doReturn(Single.error<C2BPaymentResponse>(timeOutPaymentResponse)).whenever(mpesaService).c2bPayment(isA())
+        viewModel.handleViewAction(C2BPaymentViewAction.PayButtonPressed)
 
         val expectedViewState = PaymentViewState(errorCard = PaymentErrorCardViewState(
                 messageResId = R.string.payment_response_ins_9))
@@ -121,7 +125,7 @@ class PaymentViewModelTests {
     }
 
     private fun init() {
-        val viewAction = PaymentViewAction.Init(
+        val viewAction = C2BPaymentViewAction.Init(
                 amount = "200",
                 serviceProviderCode = "171717",
                 transactionReference = "T2345CR",
@@ -138,7 +142,7 @@ class PaymentViewModelTests {
                 serviceProviderLogo = viewAction.serviceProviderLogoUrl))
 
         assertEquals(expectedViewState, getViewState())
-        assertEquals(PaymentViewModelAction.DisablePaymentButton, getAction())
+        assertEquals(C2BPaymentEvent.DisablePaymentButton, getAction())
     }
 
     private fun getViewState(): ViewState {
@@ -147,8 +151,8 @@ class PaymentViewModelTests {
         }.value!!
     }
 
-    private fun getAction(): Action {
-        return viewModel.action.apply {
+    private fun getAction(): Event {
+        return viewModel.event.apply {
             observeForever(actionObserver)
         }.value!!
     }

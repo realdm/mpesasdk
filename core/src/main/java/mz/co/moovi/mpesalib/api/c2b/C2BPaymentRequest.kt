@@ -1,4 +1,6 @@
-package mz.co.moovi.mpesalib.api
+package mz.co.moovi.mpesalib.api.c2b
+
+import com.squareup.moshi.Json
 
 /**
  * Data class with all the fields required to perform a Customer to Business (C2B) transaction Payment to Mpesa API
@@ -8,8 +10,10 @@ package mz.co.moovi.mpesalib.api
  * @input_ServiceProviderCode: Shortcode of the business where funds will be deducted from.
  * @input_TransactionReference: This is the reference of the transaction for the customer or business making the transaction. This can be a smartcard number for a TV subscription or a reference number of a utility bill.
  */
-data class PaymentRequest(val input_ThirdPartyReference: String,
-                          val input_Amount: String,
-                          val input_CustomerMSISDN: String,
-                          val input_ServiceProviderCode: String,
-                          val input_TransactionReference: String)
+data class C2BPaymentRequest(
+    @Json(name = "input_Amount") val amount: String,
+    @Json(name = "input_CustomerMSISDN") val customerMSISDN: String,
+    @Json(name = "input_ThirdPartyReference") val thirdPartyReference: String,
+    @Json(name = "input_ServiceProviderCode") val serviceProviderCode: String,
+    @Json(name = "input_TransactionReference") val transactionReference: String
+)
