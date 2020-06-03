@@ -9,12 +9,12 @@ import com.bumptech.glide.request.RequestOptions
 import mz.co.moovi.mpesalibui.R
 import mz.co.moovi.mpesalibui.extensions.createAfterTextChangeWatcher
 import mz.co.moovi.mpesalibui.extensions.setTextWithoutListener
-import kotlinx.android.synthetic.main.view_c2b_payment.view.amount_to_pay as amountToPay
-import kotlinx.android.synthetic.main.view_c2b_payment.view.pay_button as payButton
-import kotlinx.android.synthetic.main.view_c2b_payment.view.phone_number as phoneNumberField
-import kotlinx.android.synthetic.main.view_c2b_payment.view.service_provider_code as serviceProviderCode
-import kotlinx.android.synthetic.main.view_c2b_payment.view.service_provider_logo as serviceProviderLogo
-import kotlinx.android.synthetic.main.view_c2b_payment.view.service_provider_name as serviceProviderName
+import kotlinx.android.synthetic.main.mpesa_sdk_view_c2b_payment.view.amount_to_pay as amountToPay
+import kotlinx.android.synthetic.main.mpesa_sdk_view_c2b_payment.view.pay_button as payButton
+import kotlinx.android.synthetic.main.mpesa_sdk_view_c2b_payment.view.phone_number as phoneNumberField
+import kotlinx.android.synthetic.main.mpesa_sdk_view_c2b_payment.view.service_provider_code as serviceProviderCode
+import kotlinx.android.synthetic.main.mpesa_sdk_view_c2b_payment.view.service_provider_logo as serviceProviderLogo
+import kotlinx.android.synthetic.main.mpesa_sdk_view_c2b_payment.view.service_provider_name as serviceProviderName
 
 class C2BPaymentView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
@@ -22,7 +22,7 @@ class C2BPaymentView @JvmOverloads constructor(context: Context, attrs: Attribut
     private lateinit var amount: TextView
 
     init {
-        inflate(context, R.layout.view_c2b_payment, this)
+        inflate(context, R.layout.mpesa_sdk_view_c2b_payment, this)
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 

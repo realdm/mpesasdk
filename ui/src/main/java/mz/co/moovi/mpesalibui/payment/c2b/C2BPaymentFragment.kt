@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_c2b_payment.*
+import kotlinx.android.synthetic.main.mpesa_sdk_fragment_c2b_payment.*
 import mz.co.moovi.mpesalibui.MpesaSdk
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_CODE
 import mz.co.moovi.mpesalibui.MpesaSdk.ARG_SERVICE_PROVIDER_LOGO_URL
@@ -21,9 +21,9 @@ import mz.co.moovi.mpesalibui.extensions.provideViewModel
 import mz.co.moovi.mpesalibui.payment.PaymentResult
 import mz.co.moovi.mpesalibui.ui.Event
 import mz.co.moovi.mpesalibui.utils.Injector
-import kotlinx.android.synthetic.main.fragment_c2b_payment.authentication_view as authView
-import kotlinx.android.synthetic.main.fragment_c2b_payment.error_view as errorView
-import kotlinx.android.synthetic.main.fragment_c2b_payment.payment_view as paymentCard
+import kotlinx.android.synthetic.main.mpesa_sdk_fragment_c2b_payment.authentication_view as authView
+import kotlinx.android.synthetic.main.mpesa_sdk_fragment_c2b_payment.error_view as errorView
+import kotlinx.android.synthetic.main.mpesa_sdk_fragment_c2b_payment.payment_view as paymentCard
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class C2BPaymentFragment : Fragment() {
@@ -193,7 +193,7 @@ class C2BPaymentFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_c2b_payment, container, false)
+        return inflater.inflate(R.layout.mpesa_sdk_fragment_c2b_payment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,5 +1,6 @@
 package mz.co.moovi.mpesalib.api
 
+import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -51,6 +52,10 @@ class MpesaRepository(private val config: MpesaConfig) : MpesaService {
                         moshi.adapter(C2BPaymentResponse::class.java)
                     val errorBodyJson = exception.response()?.errorBody()?.string()
                     val errorBodyResponse = jsonAdapter.fromJson(errorBodyJson)
+                    Log.d(
+                        "MpesaRepository",
+                        "Payment failed. Description : ${errorBodyResponse?.responseDesc}"
+                    )
                     Response.Error(
                         code = exception.code(),
                         data = errorBodyResponse,
