@@ -1,5 +1,6 @@
 package mz.co.moovi.mpesalib.api
 
+import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -15,6 +16,10 @@ import java.util.concurrent.TimeUnit
 
 
 class MpesaRepository(private val config: MpesaConfig) : MpesaService {
+
+    companion object {
+        private val LOG_TAG = MpesaRepository::class.simpleName
+    }
 
     private val api by lazy {
         retrofit.create(MpesaApi::class.java)
@@ -49,8 +54,20 @@ class MpesaRepository(private val config: MpesaConfig) : MpesaService {
                 is HttpException -> {
                     val jsonAdapter: JsonAdapter<C2BPaymentResponse> =
                         moshi.adapter(C2BPaymentResponse::class.java)
+
                     val errorBodyJson = exception.response()?.errorBody()?.string()
-                    val errorBodyResponse = jsonAdapter.fromJson(errorBodyJson)
+                    Log.d(LOG_TAG, "Payment failed. Json error body : $errorBodyJson")
+
+                    val errorBodyResponse = try {
+                        jsonAdapter.fromJson(errorBodyJson)
+                    } catch (e: Exception) {
+                        Log.e(
+                            LOG_TAG,
+                            "Caught exception while parsing error json body. [Message: ${exception.message()}]"
+                        )
+                        null
+                    }
+
                     Response.Error(
                         code = exception.code(),
                         data = errorBodyResponse,
