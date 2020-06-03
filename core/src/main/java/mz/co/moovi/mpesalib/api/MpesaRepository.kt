@@ -44,16 +44,27 @@ class MpesaRepository(private val config: MpesaConfig) : MpesaService {
             val paymentResponse =
                 api.c2bPayment(bearerToken = bearerToken, paymentRequest = paymentRequest)
             Response.Success(paymentResponse)
-        } catch (exception: HttpException) {
-            val jsonAdapter: JsonAdapter<C2BPaymentResponse> =
-                moshi.adapter(C2BPaymentResponse::class.java)
-            val errorBodyJson = exception.response()?.errorBody()?.string()
-            val errorBodyResponse = jsonAdapter.fromJson(errorBodyJson)
-            Response.Error(
-                code = exception.code(),
-                data = errorBodyResponse,
-                throwable = exception
-            )
+        } catch (exception: Throwable) {
+            when (exception) {
+                is HttpException -> {
+                    val jsonAdapter: JsonAdapter<C2BPaymentResponse> =
+                        moshi.adapter(C2BPaymentResponse::class.java)
+                    val errorBodyJson = exception.response()?.errorBody()?.string()
+                    val errorBodyResponse = jsonAdapter.fromJson(errorBodyJson)
+                    Response.Error(
+                        code = exception.code(),
+                        data = errorBodyResponse,
+                        throwable = exception
+                    )
+                }
+                else -> {
+                    Response.Error(
+                        code = 400,
+                        data = null,
+                        throwable = exception
+                    )
+                }
+            }
         }
     }
 }

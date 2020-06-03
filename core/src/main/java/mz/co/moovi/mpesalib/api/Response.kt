@@ -6,6 +6,5 @@ sealed class Response<T : Any> {
         val data: T? = null,
         val throwable: Throwable
     ) : Response<T>()
-
     data class Success<T : Any>(val data: T) : Response<T>()
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 
 val TEST_OBSERVER: LifecycleOwner = object : LifecycleOwner {
-
     private val registry = LifecycleRegistry(this).apply {
         // Creates a LifecycleRegistry in RESUMED state.
         handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
