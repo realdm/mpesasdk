@@ -5,7 +5,7 @@ import java.io.InputStream
 object TestFixtureLoader {
 
     fun getFixtureJson(fileName: String): String {
-        val classLoader = javaClass.classLoader
+        val classLoader = javaClass.classLoader!!
         val fileInputStream = classLoader.getResourceAsStream("$fileName.json")
         return readJsonFromStream(fileInputStream)
     }
