@@ -33,11 +33,11 @@ class C2BPaymentFragment : Fragment() {
             C2BPaymentViewModel(
                 mpesaService = Injector.mpesaService,
                 arguments = C2BPaymentViewModel.Arguments(
-                    amount = arguments!!.getString(ARG_TRANSACTION_AMOUNT),
-                    serviceProviderCode = arguments!!.getString(ARG_SERVICE_PROVIDER_CODE),
-                    serviceProviderName = arguments!!.getString(ARG_SERVICE_PROVIDER_NAME),
-                    transactionReference = arguments!!.getString(ARG_TRANSACTION_REFERENCE),
-                    serviceProviderLogo = arguments!!.getString(ARG_SERVICE_PROVIDER_LOGO_URL)
+                    amount = arguments!!.getString(ARG_TRANSACTION_AMOUNT)!!,
+                    serviceProviderCode = arguments!!.getString(ARG_SERVICE_PROVIDER_CODE)!!,
+                    serviceProviderName = arguments!!.getString(ARG_SERVICE_PROVIDER_NAME)!!,
+                    transactionReference = arguments!!.getString(ARG_TRANSACTION_REFERENCE)!!,
+                    serviceProviderLogo = arguments!!.getString(ARG_SERVICE_PROVIDER_LOGO_URL)!!
                 )
             )
         }
