@@ -9,6 +9,7 @@ import mz.co.moovi.mpesalibui.utils.Injector
 inline fun <reified T : ViewModel> Fragment.provideViewModel(): T {
 	val factory = object : ViewModelProvider.Factory {
 		override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+			@Suppress("UNCHECKED_CAST")
 			return PaymentViewModel(Injector.mPesaService()) as T
 		}
 	}
