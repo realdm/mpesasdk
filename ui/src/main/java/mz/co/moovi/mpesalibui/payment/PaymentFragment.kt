@@ -108,6 +108,11 @@ class PaymentFragment : Fragment() {
         setupUi()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setupUi() {
         setupToolbar()
         binding.paymentAuthenticationCard.handler = { viewModel.handleViewAction(it) }
