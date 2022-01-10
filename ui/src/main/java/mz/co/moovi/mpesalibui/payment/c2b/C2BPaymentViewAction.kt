@@ -1,6 +1,6 @@
 package mz.co.moovi.mpesalibui.payment.c2b
 
-import mz.co.moovi.mpesalibui.ui.ViewAction
+import mz.co.moovi.mpesalibui.architecture.ViewAction
 
 sealed class C2BPaymentViewAction : ViewAction {
     object RetryPressed : C2BPaymentViewAction()

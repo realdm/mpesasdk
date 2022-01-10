@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../../../layout/compose-model-1641814469080.xml" value="0.335" />
+        <entry key="../../../../../layout/compose-model-1641814606747.xml" value="0.15244932432432431" />
+        <entry key="../../../../../layout/compose-model-1641815691955.xml" value="0.16047297297297297" />
+        <entry key="../../../../../layout/compose-model-1641816616934.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/compose-model-1641816934036.xml" value="0.2521114864864865" />
+        <entry key="../../../../../layout/compose-model-1641818207857.xml" value="0.32791327913279134" />
+        <entry key="../../../../../layout/compose-model-1641818808355.xml" value="0.32791327913279134" />
+        <entry key="../../../../../layout/compose-model-1641819210168.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/compose-model-1641820014947.xml" value="0.25" />
+        <entry key="../../../../../layout/compose-model-1641821395246.xml" value="0.16047297297297297" />
+        <entry key="../../../../../layout/compose-model-1641822056867.xml" value="0.16047297297297297" />
+        <entry key="../../../../../layout/compose-model-1641822097428.xml" value="0.16047297297297297" />
+        <entry key="../../../../../layout/compose-model-1641822368445.xml" value="0.22407407407407406" />
+        <entry key="../../../../../layout/compose-model-1641822920262.xml" value="0.335" />
+        <entry key="../../../../../layout/compose-model-1641822936726.xml" value="0.22407407407407406" />
+        <entry key="../../../../../layout/compose-model-1641833648765.xml" value="0.22407407407407406" />
+        <entry key="../../../../../layout/compose-model-1641844548950.xml" value="0.16574074074074074" />
+        <entry key="../../../../../layout/compose-model-1641859144823.xml" value="0.29096283783783783" />
+        <entry key="../../../../../layout/compose-model-1641859207369.xml" value="0.335" />
+        <entry key="../../../../../layout/compose-model-1641859384660.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1641864965717.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/compose-model-1641865490105.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/compose-model-1641866681522.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/compose-model-1641866985219.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/compose-model-1641901641971.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/compose-model-1641902763092.xml" value="0.28040540540540543" />
+        <entry key="../../../../../layout/compose-model-1641904194396.xml" value="0.335" />
+        <entry key="../../../../../layout/compose-model-1641904963358.xml" value="0.29180743243243246" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.18385416666666668" />
+        <entry key="ui/src/main/res/drawable/button_selector.xml" value="0.1" />
+        <entry key="ui/src/main/res/drawable/ic_close_24dp.xml" value="0.1" />
+        <entry key="ui/src/main/res/drawable/illustration_authentication_error.xml" value="0.1" />
+        <entry key="ui/src/main/res/drawable/illustration_generic_error.xml" value="0.1" />
+        <entry key="ui/src/main/res/drawable/illustration_insufficient_balance.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

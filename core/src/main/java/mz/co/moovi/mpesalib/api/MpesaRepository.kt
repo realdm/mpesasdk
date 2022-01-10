@@ -4,6 +4,8 @@ import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import mz.co.moovi.mpesalib.api.c2b.C2BPaymentRequest
 import mz.co.moovi.mpesalib.api.c2b.C2BPaymentResponse
 import mz.co.moovi.mpesalib.config.KeyGenerator
@@ -12,12 +14,15 @@ import okhttp3.OkHttpClient
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.IOException
+import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 
 
 class MpesaRepository(private val config: MpesaConfig) : MpesaService {
 
     companion object {
+        private const val PAYMENT_TIMEOUT = 90000L
         private val LOG_TAG = MpesaRepository::class.simpleName
     }
 
@@ -33,7 +38,7 @@ class MpesaRepository(private val config: MpesaConfig) : MpesaService {
 
     private val retrofit by lazy {
         val okHttp = OkHttpClient.Builder()
-            .readTimeout(Integer.MAX_VALUE.toLong(), TimeUnit.MILLISECONDS)
+            .readTimeout(PAYMENT_TIMEOUT, TimeUnit.MILLISECONDS)
             .build()
 
         Retrofit.Builder()
@@ -43,44 +48,52 @@ class MpesaRepository(private val config: MpesaConfig) : MpesaService {
             .build()
     }
 
-    override suspend fun c2bPayment(paymentRequest: C2BPaymentRequest): Response<C2BPaymentResponse> {
+
+    override fun c2bPayment(paymentRequest: C2BPaymentRequest): Flow<Response<C2BPaymentResponse>> {
         val bearerToken = """Bearer ${KeyGenerator(config).bearerToken}"""
-        return try {
-            val paymentResponse =
-                api.c2bPayment(bearerToken = bearerToken, paymentRequest = paymentRequest)
-            Response.Success(paymentResponse)
-        } catch (exception: Throwable) {
-            when (exception) {
-                is HttpException -> {
-                    val jsonAdapter: JsonAdapter<C2BPaymentResponse> =
-                        moshi.adapter(C2BPaymentResponse::class.java)
+        return flow {
+            try {
+                val paymentResponse =
+                    api.c2bPayment(bearerToken = bearerToken, paymentRequest = paymentRequest)
+                emit(Response.Success(paymentResponse))
+            } catch (exception: Throwable) {
+                val error = when (exception) {
+                    is HttpException -> {
+                        val jsonAdapter: JsonAdapter<C2BPaymentResponse> =
+                            moshi.adapter(C2BPaymentResponse::class.java)
 
-                    val errorBodyJson = exception.response()?.errorBody()?.string()
-                    Log.d(LOG_TAG, "Payment failed. Json error body : $errorBodyJson")
+                        val errorBodyJson = exception.response()?.errorBody()?.string()
 
-                    val errorBodyResponse = try {
-                        jsonAdapter.fromJson(errorBodyJson)
-                    } catch (e: Exception) {
-                        Log.e(
-                            LOG_TAG,
-                            "Caught exception while parsing error json body. [Message: ${exception.message()}]"
-                        )
-                        null
+                        val errorBodyResponse = try {
+                            jsonAdapter.fromJson(errorBodyJson)
+                        } catch (e: Exception) {
+                            Log.e(
+                                LOG_TAG,
+                                "Caught exception while parsing error json body. [Message: ${exception.message()}]"
+                            )
+                            null
+                        }
+
+                        if (errorBodyResponse == null) {
+                            Response.UnknownError()
+                        } else {
+                            Response.Error(
+                                code = exception.code(),
+                                error = errorBodyResponse,
+                                throwable = exception
+                            )
+                        }
+
                     }
-
-                    Response.Error(
-                        code = exception.code(),
-                        data = errorBodyResponse,
-                        throwable = exception
-                    )
+                    is IOException,
+                    is SocketTimeoutException -> {
+                        Response.NetworkError()
+                    }
+                    else -> {
+                        Response.UnknownError()
+                    }
                 }
-                else -> {
-                    Response.Error(
-                        code = 400,
-                        data = null,
-                        throwable = exception
-                    )
-                }
+                emit(error)
             }
         }
     }

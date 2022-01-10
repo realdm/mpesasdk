@@ -1,21 +1,13 @@
 package mz.co.moovi.mpesalibui
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import mz.co.moovi.mpesalibui.payment.PaymentActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import mz.co.moovi.mpesalibui.payment.C2BPaymentSuccess
+import mz.co.moovi.mpesalibui.payment.c2b.C2BParameters
+import mz.co.moovi.mpesalibui.payment.c2b.C2BResultContract
 
 object MpesaSdk {
-
-    const val ARG_RESULT_TRANSACTION_ID = "transaction_id"
-    const val ARG_RESULT_CONVERSATION_ID = "conversation_id"
-
-    const val ARG_SERVICE_PROVIDER_NAME = "arg_provider_name"
-    const val ARG_SERVICE_PROVIDER_CODE = "arg_provider_code"
-    const val ARG_TRANSACTION_AMOUNT = "arg_transaction_amount"
-    const val ARG_TRANSACTION_REFERENCE = "arg_transaction_reference"
-    const val ARG_SERVICE_PROVIDER_LOGO_URL = "arg_service_provider_logo_urls"
 
     const val PRODUCTION_BASE_URL = "https://api.vm.co.mz:18352"
     const val SANDBOX_BASE_URL = "https://api.sandbox.vm.co.mz:18352"
@@ -66,39 +58,58 @@ object MpesaSdk {
         initialized = true
     }
 
-    fun pay(activity: Activity, requestCode: Int, amount: String, transactionReference: String) {
+    /**
+     * Starts the payment activity from a composable.
+     */
+    @Composable
+    fun pay(
+        amount: String,
+        transactionReference: String,
+        launcher: ManagedActivityResultLauncher<C2BParameters, C2BPaymentSuccess?>,
+    ) {
         if (!initialized) {
-            throw IllegalArgumentException("SDK was not initialized")
+            throw IllegalStateException("SDK must be initialized before making a payment")
         }
-
-        val intent = Intent(activity, PaymentActivity::class.java).apply {
-            val args = createPaymentBundle(amount, transactionReference)
-            putExtras(args)
-        }
-
-        activity.startActivityForResult(intent, requestCode)
-    }
-
-    fun pay(fragment: Fragment, requestCode: Int, amount: String, transactionReference: String) {
-        if (!initialized) {
-            throw IllegalArgumentException("SDK was not initialized")
-        }
-
-        val intent = Intent(fragment.context, PaymentActivity::class.java).apply {
-            val args = createPaymentBundle(amount, transactionReference)
-            putExtras(args)
-        }
-
-        fragment.startActivityForResult(intent, requestCode)
-    }
-
-    private fun createPaymentBundle(amount: String, transactionReference: String): Bundle {
-        return PaymentActivity.packArgs(
+        val c2bParams = createC2BParameters(
             amount = amount,
-            transactionReference = transactionReference,
-            serviceProviderName = serviceProviderName,
-            serviceProviderCode = serviceProviderCode,
-            serviceProviderLogoUrl = serviceProviderLogoUrl
+            transactionReference = transactionReference
+        )
+        launcher.launch(c2bParams)
+    }
+
+
+    /**
+     * Starts the payment activity using the new Activity for result API's
+     */
+    fun pay(
+        amount: String,
+        activity: AppCompatActivity,
+        transactionReference: String,
+        onPaymentComplete: (C2BPaymentSuccess?) -> Unit
+    ) {
+        if (!initialized) {
+            throw IllegalArgumentException("SDK must be initialized before making a payment")
+        }
+
+        val makePayment = activity.registerForActivityResult(C2BResultContract()) {
+            onPaymentComplete.invoke(it)
+        }
+
+        val c2bParams = createC2BParameters(
+            amount = amount,
+            transactionReference = transactionReference
+        )
+        makePayment.launch(c2bParams)
+    }
+
+
+    private fun createC2BParameters(amount: String, transactionReference: String): C2BParameters {
+        return C2BParameters(
+            amount = amount,
+            providerName = serviceProviderName,
+            providerCode = serviceProviderCode,
+            providerLogo = serviceProviderLogoUrl,
+            transactionRef = transactionReference
         )
     }
 }

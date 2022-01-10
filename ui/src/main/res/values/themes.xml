@@ -4,7 +4,7 @@
     <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorAccent">@color/red_dark</item>
         <item name="colorPrimary">@color/red_dark</item>
-        <item name="colorPrimaryDark">@color/red_dark</item>
+        <item name="colorPrimaryDark">@color/color_white</item>
         <item name="android:windowBackground">@color/color_white</item>
     </style>
 

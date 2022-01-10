@@ -13,5 +13,5 @@ data class C2BPaymentResponse(
     @Json(name = "output_ResponseCode") val responseCode: String,
     @Json(name = "output_ResponseDesc") val responseDesc: String,
     @Json(name = "output_TransactionID") val transactionId: String? = null,
-    @Json(name = "output_ConversationID") val conversationId: String?= null
+    @Json(name = "output_ConversationID") val conversationId: String? = null
 )
