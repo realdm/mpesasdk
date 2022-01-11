@@ -1,13 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 31
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
@@ -47,4 +48,21 @@ dependencies {
 
 repositories {
     mavenCentral()
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'mz.co.moovi.mpesalibui'
+                artifactId = 'core'
+                version = '0.2.0'
+            }
+        }
+    }
 }
