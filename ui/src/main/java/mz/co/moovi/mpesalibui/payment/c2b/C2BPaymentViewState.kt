@@ -1,24 +1,31 @@
 package mz.co.moovi.mpesalibui.payment.c2b
 
-import mz.co.moovi.mpesalibui.ui.ViewState
+import mz.co.moovi.mpesalibui.architecture.ViewState
+import mz.co.moovi.mpesalibui.utils.ResolvableString
 
 sealed class C2BPaymentViewState : ViewState {
-    data class Idle(
+    object Initializing : C2BPaymentViewState()
+    data class ReadyToPay(
         val amount: String,
         val phoneNumber: String,
-        val isSavingEnabled: Boolean,
-        val serviceProviderName: String,
-        val serviceProviderCode: String,
-        val serviceProviderLogo: String
+        val providerName: String,
+        val providerLogo: String,
+        val providerShortCode: String,
+        val payButtonEnabled: Boolean
     ) : C2BPaymentViewState()
 
-    data class Authenticating(
+    data class ProcessingPayment(
         val phoneNumber: String,
-        val serviceProviderName: String
+        val providerName: String
     ) : C2BPaymentViewState()
 
-    object UnknownError : C2BPaymentViewState()
-    object NetworkError : C2BPaymentViewState()
-    object AuthenticationError : C2BPaymentViewState()
-    object InsufficientFundsError : C2BPaymentViewState()
+    data class PaymentFailed(
+        val title: ResolvableString,
+        val description: ResolvableString
+    ) : C2BPaymentViewState()
+
+    data class PaymentSuccess(
+        val amount: String,
+        val providerName: String
+    ) : C2BPaymentViewState()
 }

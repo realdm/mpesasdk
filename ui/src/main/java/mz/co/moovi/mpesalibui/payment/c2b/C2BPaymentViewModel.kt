@@ -1,152 +1,287 @@
 package mz.co.moovi.mpesalibui.payment.c2b
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shopify.livedataktx.SingleLiveData
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import mz.co.moovi.mpesalib.api.MpesaService
 import mz.co.moovi.mpesalib.api.Response
 import mz.co.moovi.mpesalib.api.TransactionResponseCode
 import mz.co.moovi.mpesalib.api.c2b.C2BPaymentRequest
 import mz.co.moovi.mpesalib.api.toTransactionResponseCode
-import mz.co.moovi.mpesalibui.payment.PaymentResult
-import mz.co.moovi.mpesalibui.ui.ViewAction
+import mz.co.moovi.mpesalibui.R
+import mz.co.moovi.mpesalibui.payment.C2BPaymentSuccess
 import mz.co.moovi.mpesalibui.utils.ReferenceGenerator
+import mz.co.moovi.mpesalibui.utils.resolvableString
 
-class C2BPaymentViewModel(
-    private val arguments: Arguments,
-    private val mpesaService: MpesaService
-) :
-    ViewModel() {
+class C2BPaymentViewModel constructor(
+    private val mPesaService: MpesaService,
+    private val c2bParameters: C2BParameters
+) : ViewModel() {
 
-    companion object {
-        private const val COUNTRY_CODE_PREFIX = "(+258)"
-    }
-
-    private val _event = SingleLiveData<C2BPaymentEvent>()
-    val event: LiveData<C2BPaymentEvent>
+    private val _event = MutableSharedFlow<C2BPaymentEvent>()
+    val event: Flow<C2BPaymentEvent>
         get() = _event
 
-    private val _viewState = MutableLiveData<C2BPaymentViewState>()
-    val viewState: LiveData<C2BPaymentViewState>
+    private val _viewState = MutableStateFlow<C2BPaymentViewState>(C2BPaymentViewState.Initializing)
+    val viewState: Flow<C2BPaymentViewState>
         get() = _viewState
 
     private var state = State(phoneNumber = "")
 
     init {
-        _viewState.postValue(createIdleViewState())
+        emitViewState(readyToPayViewState())
     }
 
-    fun handleViewAction(viewAction: ViewAction) {
+    fun handleViewAction(viewAction: C2BPaymentViewAction) {
         when (viewAction) {
             is C2BPaymentViewAction.RetryPressed -> retry()
             is C2BPaymentViewAction.CancelPressed -> cancel()
-            is C2BPaymentViewAction.PayButtonPressed -> onMakePayment()
+            is C2BPaymentViewAction.PayButtonPressed -> makePayment()
             is C2BPaymentViewAction.EditPhoneNumber -> editPhoneNumber(viewAction)
         }
     }
 
     private fun cancel() {
-        _event.postValue(C2BPaymentEvent.CancelPayment)
+        emitEvent(C2BPaymentEvent.CancelPayment)
     }
 
     private fun retry() {
-        _viewState.postValue(createIdleViewState())
+        emitViewState(readyToPayViewState())
     }
 
     private fun editPhoneNumber(viewAction: C2BPaymentViewAction.EditPhoneNumber) {
-        state = state.copy(phoneNumber = viewAction.phoneNumber)
-        _viewState.postValue(createIdleViewState())
+        editState {
+            it.copy(phoneNumber = viewAction.phoneNumber)
+        }
+        emitViewState(readyToPayViewState())
     }
 
-    private fun onMakePayment() {
-        _viewState.postValue(createAuthenticatingViewState())
-        viewModelScope.launch(viewModelScope.coroutineContext + Dispatchers.IO) {
-            val response = mpesaService.c2bPayment(createRequest())
-            when (response) {
-                is Response.Error -> {
-                    when (response.data?.responseCode?.toTransactionResponseCode()) {
-                        TransactionResponseCode.INVALID_CREDENTIALS -> {
-                            _viewState.postValue(C2BPaymentViewState.AuthenticationError)
-                        }
-                        TransactionResponseCode.INSUFFICIENT_BALANCE -> {
-                            _viewState.postValue(C2BPaymentViewState.InsufficientFundsError)
-                        }
-                        else -> {
-                            _viewState.postValue(C2BPaymentViewState.UnknownError)
-                        }
-                    }
-                }
-                is Response.Success -> {
-                    val data = response.data
-                    when (data.responseCode.toTransactionResponseCode()) {
-                        TransactionResponseCode.TRANSACTION_SUCCESSFUL -> {
-                            _event.postValue(
-                                C2BPaymentEvent.SetResult(
-                                    PaymentResult.Success(
-                                        transactionId = data.transactionId!!,
-                                        conversationId = data.conversationId!!
-                                    )
-                                )
+    private fun makePayment() {
+        launch { emitViewState(authenticatingViewState()) }
+        launch {
+            mPesaService.c2bPayment(createRequest()).collect { response ->
+                when (response) {
+                    is Response.Error -> {
+                        when (val code =
+                            response.error?.responseCode?.toTransactionResponseCode()) {
+                            is TransactionResponseCode.UserCode -> handleUserTransactionResponseCode(
+                                code
+                            )
+                            is TransactionResponseCode.ServiceCode -> handleServiceTransactionResponseCode(
+                                code
+                            )
+                            is TransactionResponseCode.DeveloperCode -> handleDeveloperTransactionResponseCode(
+                                code
                             )
                         }
-                        else -> {
-                            _viewState.postValue(C2BPaymentViewState.UnknownError)
+                    }
+                    is Response.Success -> {
+                        val data = response.data
+                        when (data.responseCode.toTransactionResponseCode()) {
+                            is TransactionResponseCode.ServiceCode.TransactionSuccess -> {
+                                emitViewState(
+                                    C2BPaymentViewState.PaymentSuccess(
+                                        amount = c2bParameters.amount,
+                                        providerName = c2bParameters.providerName
+                                    )
+                                )
+                                emitEvent(
+                                    C2BPaymentEvent.SetResult(
+                                        C2BPaymentSuccess(
+                                            transactionId = data.transactionId!!,
+                                            conversationId = data.conversationId!!
+                                        )
+                                    ),
+                                    delay = 3500
+                                )
+                            }
+                            else -> {
+                                emitViewState(
+                                    createErrorViewState(
+                                        title = R.string.c2b_payment_payment_generic_error_title,
+                                        description = R.string.c2b_payment_payment_generic_error_description
+                                    )
+                                )
+                            }
                         }
+                    }
+                    is Response.NetworkError -> {
+                        emitViewState(
+                            createErrorViewState(
+                                title = R.string.c2b_payment_payment_generic_error_title,
+                                description = R.string.c2b_payment_user_error_network_error
+                            )
+                        )
+                    }
+                    is Response.UnknownError -> {
+                        emitViewState(
+                            createErrorViewState(
+                                title = R.string.c2b_payment_payment_generic_error_title,
+                                description = R.string.c2b_payment_payment_generic_error_description
+                            )
+                        )
                     }
                 }
             }
         }
     }
 
+    private fun handleUserTransactionResponseCode(code: TransactionResponseCode.UserCode) {
+        when (code) {
+            is TransactionResponseCode.UserCode.InsuficientBalance -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_user_error_insuficient_balance_message
+                    )
+                )
+            }
+            is TransactionResponseCode.UserCode.TransactionCancelledByCustomer -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_user_error_cancelled_authentication
+                    )
+                )
+            }
+            TransactionResponseCode.UserCode.UserNotActive,
+            TransactionResponseCode.UserCode.CustomerAccountNotActive -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_user_error_account_not_active
+                    )
+                )
+            }
+            TransactionResponseCode.UserCode.CustomerProfileHasProblems -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_user_error_customer_has_problems
+                    )
+                )
+            }
+            TransactionResponseCode.UserCode.InvalidNumber -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_user_error_invalid_number
+                    )
+                )
+            }
+
+        }
+    }
+
+    private fun handleDeveloperTransactionResponseCode(code: TransactionResponseCode.DeveloperCode) {
+        when (code) {
+            TransactionResponseCode.DeveloperCode.InvalidSecurityCredential -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_payment_generic_error_description
+                    )
+                )
+            }
+            else -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_payment_generic_error_description
+                    )
+                )
+            }
+        }
+    }
+
+    private fun handleServiceTransactionResponseCode(code: TransactionResponseCode.ServiceCode) {
+        when (code) {
+            TransactionResponseCode.ServiceCode.TransactionSuccess -> {}
+            else -> {
+                emitViewState(
+                    createErrorViewState(
+                        title = R.string.c2b_payment_payment_generic_error_title,
+                        description = R.string.c2b_payment_payment_generic_error_description
+                    )
+                )
+            }
+        }
+    }
+
+    private fun createErrorViewState(
+        title: Int,
+        description: Int
+    ): C2BPaymentViewState.PaymentFailed {
+        return C2BPaymentViewState.PaymentFailed(
+            title = resolvableString(title),
+            description = resolvableString(description)
+        )
+    }
 
     private fun createRequest(): C2BPaymentRequest {
         return C2BPaymentRequest(
-            amount = arguments.amount,
+            amount = c2bParameters.amount,
             customerMSISDN = "258${state.phoneNumber}",
-            serviceProviderCode = arguments.serviceProviderCode,
-            transactionReference = arguments.transactionReference,
-            thirdPartyReference = ReferenceGenerator.generateReference(arguments.transactionReference)
+            serviceProviderCode = c2bParameters.providerCode,
+            transactionReference = c2bParameters.transactionRef,
+            thirdPartyReference = ReferenceGenerator.generateReference(c2bParameters.transactionRef)
         )
     }
 
-    private fun createIdleViewState(): C2BPaymentViewState.Idle {
-        return C2BPaymentViewState.Idle(
-            amount = arguments.amount,
+    private fun readyToPayViewState(): C2BPaymentViewState.ReadyToPay {
+        return C2BPaymentViewState.ReadyToPay(
+            amount = c2bParameters.amount,
             phoneNumber = state.phoneNumber,
-            isSavingEnabled = hasValidPhoneNumber(),
-            serviceProviderCode = arguments.serviceProviderCode,
-            serviceProviderLogo = arguments.serviceProviderLogo,
-            serviceProviderName = arguments.serviceProviderName
+            payButtonEnabled = hasValidPhoneNumber(),
+            providerShortCode = c2bParameters.providerCode,
+            providerLogo = c2bParameters.providerLogo,
+            providerName = c2bParameters.providerName
         )
     }
 
-    private fun createAuthenticatingViewState(): C2BPaymentViewState.Authenticating {
-        return C2BPaymentViewState.Authenticating(
+    private fun authenticatingViewState(): C2BPaymentViewState.ProcessingPayment {
+        return C2BPaymentViewState.ProcessingPayment(
             phoneNumber = state.phoneNumber,
-            serviceProviderName = arguments.serviceProviderName
+            providerName = c2bParameters.providerName
         )
     }
 
     private fun hasValidPhoneNumber(): Boolean {
         val phoneNumber = state.phoneNumber
-        val isValidVodacomMOZNumber = when (phoneNumber.take(2)) {
+        val isVodacomMozambiqueNumber = when (phoneNumber.take(2)) {
             "84", "85" -> true
             else -> false
         }
-        return phoneNumber.isNotEmpty() && phoneNumber.length == 9 && isValidVodacomMOZNumber
+        return phoneNumber.isNotEmpty() && phoneNumber.length == 9 && isVodacomMozambiqueNumber
     }
 
     data class State(val phoneNumber: String)
 
-    data class Arguments(
-        val amount: String,
-        val serviceProviderLogo: String,
-        val serviceProviderCode: String,
-        val serviceProviderName: String,
-        val transactionReference: String
-    )
+    private fun editState(editor: (State) -> State) {
+        this.state = editor.invoke(state)
+    }
+
+    private fun emitEvent(event: C2BPaymentEvent, delay: Long? = null) {
+        launch {
+            delay?.run { delay(this) }
+            _event.emit(event)
+        }
+    }
+
+    private fun emitViewState(viewState: C2BPaymentViewState) {
+        launch {
+            _viewState.emit(viewState)
+        }
+    }
+
+    private fun launch(executor: suspend () -> Unit) {
+        viewModelScope.launch {
+            executor.invoke()
+        }
+    }
 }

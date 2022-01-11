@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="mz.co.moovi.mpesalibui">
 
     <application>
-        <activity android:name=".payment.PaymentActivity"
+        <activity
+            android:name=".payment.PaymentActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
-            android:screenOrientation="portrait"/>
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

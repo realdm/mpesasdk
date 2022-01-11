@@ -1,37 +1,76 @@
 package mz.co.moovi.mpesalibui.payment
 
+import abcdar.io.ruca.ui.theme.MpesaSdkUiTheme
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import mz.co.moovi.mpesalibui.MpesaSdk
-import mz.co.moovi.mpesalibui.R
-import mz.co.moovi.mpesalibui.payment.c2b.C2BPaymentFragment
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.insets.ProvideWindowInsets
+import mz.co.moovi.mpesalibui.navigation.C2BNavCommands
+import mz.co.moovi.mpesalibui.payment.c2b.C2BParameters
+import mz.co.moovi.mpesalibui.payment.c2b.C2BPayment
 
-class PaymentActivity : AppCompatActivity() {
+class PaymentActivity : ComponentActivity() {
 
     companion object {
-        fun packArgs(
-            amount: String,
-            serviceProviderName: String,
-            serviceProviderCode: String,
-            transactionReference: String, serviceProviderLogoUrl: String
-        ): Bundle {
+        const val C2B_PARAMS = "c2b_params"
+        const val C2B_RESULTS = "c2b_results"
+    }
 
-            return Bundle().apply {
-                putString(MpesaSdk.ARG_TRANSACTION_AMOUNT, amount)
-                putString(MpesaSdk.ARG_SERVICE_PROVIDER_NAME, serviceProviderName)
-                putString(MpesaSdk.ARG_SERVICE_PROVIDER_CODE, serviceProviderCode)
-                putString(MpesaSdk.ARG_TRANSACTION_REFERENCE, transactionReference)
-                putString(MpesaSdk.ARG_SERVICE_PROVIDER_LOGO_URL, serviceProviderLogoUrl)
+    private val c2bParams
+        get() = intent?.extras?.getParcelable<C2BParameters>(C2B_PARAMS)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MpesaSdkUiTheme {
+                ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
+                    Surface {
+                        RenderContent()
+                    }
+                }
             }
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.mpesa_sdk_activity_payment)
-        val fragment = C2BPaymentFragment().apply {
-            arguments = intent.extras
+    @Composable
+    fun RenderContent() {
+        NavHost(navController = rememberNavController(), startDestination = getStartDestination()) {
+            composable(
+                route = C2BNavCommands.root.destination,
+                arguments = C2BNavCommands.root.namedArgs
+            ) {
+                C2BPayment(
+                    c2BParameters = c2bParams!!,
+                    onCancelPayment = {
+                        setResult(Activity.RESULT_CANCELED)
+                        finish()
+                    },
+                    onCompletePayment = {
+                        setResult(
+                            Activity.RESULT_OK,
+                            Intent().apply {
+                                putExtra(C2B_RESULTS, it)
+                            }
+                        )
+                        finish()
+                    }
+                )
+            }
         }
-        supportFragmentManager.beginTransaction().replace(R.id.container, fragment).commit()
+    }
+
+    private fun getStartDestination(): String {
+        if (c2bParams != null) {
+            return C2BNavCommands.root.createRoute(listOf(c2bParams!!))
+        } else {
+            throw IllegalStateException("Invalid params. other API's not implemented yet")
+        }
     }
 }

@@ -1,1 +1,2 @@
-include ':app', ':ui', ":core"
+include ':ui', ":core"
+include ':mpesasdk-demo-compose'
