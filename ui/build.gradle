@@ -73,7 +73,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:1.4.0")
 
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
 
     //Lottie compose
     implementation "com.airbnb.android:lottie-compose:4.2.2"
@@ -82,7 +81,7 @@ dependencies {
 
     // Testing
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'android.arch.core:core-testing:1.1.1'
+    testImplementation 'androidx.arch.core:core-testing:2.0.0'
     androidTestImplementation 'androidx.test:runner:1.4.1-alpha03'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC2"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha03'
