@@ -1,38 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Mpesa-Lib-UI</string>
-    <string name="payment_activity_toolbar_title">Make Payment</string>
-
-    <!-- Make payment card -->
-    <string name="payment_card_currency" translatable="false">Mt</string>
-
-    <string name="payment_card_country_code_prefix" translatable="false">+258</string>
-    <string name="payment_card_phone_number_hint" translatable="false">0001002</string>
-    <string name="payment_card_phone_number_prefix" translatable="false">+258 </string>
-    <string name="payment_card_pay_button_text">Pay with M-pesa</string>
-    <string name="payment_provider_code_placeholder">Paying to %s • %s</string>
-    <string name="payment_card_view_phone_number_prompt">Insert your M-Pesa account phone number</string>
-
-    <!-- Processing C2B Payment Card-->
-    <string name="c2b_payment_processing_payment_title">Processing Payment</string>
+    <string name="payment_activity_toolbar_title">Faça o Pagamento</string>
+    <string name="payment_card_pay_button_text">Pague com o M-Pesa</string>
+    <string name="payment_card_view_phone_number_prompt">Insira o número de telefone da sua conta M-Pesa</string>
+    <string name="c2b_payment_processing_payment_title">Verifique o seu telefone</string>
     <string name="c2b_payment_processing_payment_description">
-        An USSD notification from Vodacom was sent to the number: +258 %s. Insert your M-pesa pin to authorized the payment transaction.
+        Uma notificação USSD foi enviada para o número: %s. Insira o PIN do seu M-Pesa para completar a transação.
     </string>
 
-    <!--New C2BPayment Error resources-->
-    <string name="c2b_payment_error_retry_button">Retry</string>
-
-    <string name="c2b_payment_payment_generic_error_title">Payment failed</string>
-    <string name="c2b_payment_payment_generic_error_description">Something went wrong while trying to process your payment, please try again later.</string>
-
-    <!--User Errors-->
-    <string name="c2b_payment_user_error_insuficient_balance_message">The payment failed because the account does not have sufficient balance</string>
-    <string name="c2b_payment_user_error_cancelled_authentication">The payment failed because you cancelled the authentication. please try again later.</string>
-    <string name="c2b_payment_user_error_account_not_active">The payment failed because the number inserted does not have a valid M-pesa account</string>
-    <string name="c2b_payment_user_error_customer_has_problems">The payment failed because of some problems on your account. Please contact Vodacom for support.</string>
-    <string name="c2b_payment_user_error_invalid_number">The payment failed because the inserted phone number is not valid.</string>
-    <string name="c2b_payment_user_error_network_error">The payment failed because you are not connected to the internet. Please check your connection and try again</string>
-
-    <string name="message">Payment successful</string>
-    <string name="c2b_payment_success_description">You successfully paid %s Mtn to %s</string>
-
+    <string name="payment_card_currency" translatable="false">Mt</string>
+    <string name="payment_card_country_code_prefix" translatable="false">+258</string>
+    <string name="message">Pagamento bem-sucedido</string>
+    <string name="c2b_payment_error_retry_button">Tentar novamente</string>
+    <string name="payment_provider_code_placeholder">Pagar a %s • %s</string>
+    <string name="c2b_payment_payment_generic_error_title">Pagamento sem sucesso</string>
+    <string name="c2b_payment_success_description">Você pagou com sucesso %s Mtn para %s</string>
+    <string name="c2b_payment_payment_generic_error_description">Ocorreu um erro ao tentar processar seu pagamento. Por favor, tente novamente mais tarde.</string>
+    <string name="c2b_payment_user_error_insuficient_balance_message">O pagamento falhou porque a conta não tem saldo suficiente.</string>
+    <string name="c2b_payment_user_error_cancelled_authentication">O pagamento falhou porque você cancelou a autenticação. Por favor, tente novamente mais tarde.</string>
+    <string name="c2b_payment_user_error_account_not_active">O pagamento falhou porque o número inserido não possui uma conta M-pesa válida. Por favor contacte a vodacom ou tente utilizar outro número.</string>
+    <string name="c2b_payment_user_error_customer_has_problems">O pagamento falhou devido a alguns problemas na sua conta. Entre em contato com a Vodacom para obter suporte.</string>
+    <string name="c2b_payment_user_error_invalid_number">O pagamento falhou porque o número de telefone inserido não é válido.</string>
+    <string name="c2b_payment_user_error_network_error">O pagamento falhou porque você não está conectado à Internet. Por favor verifique sua conexão e tente novamente</string>
 </resources>
+
+<!-- English translations for the future-->
+
+<!--<resources>-->
+<!--    <string name="app_name" translatable="false">Mpesa-Lib-UI</string>-->
+<!--    <string name="payment_activity_toolbar_title">Make Payment</string>-->
+
+<!--    &lt;!&ndash; Make payment card &ndash;&gt;-->
+<!--    <string name="payment_card_currency" translatable="false">Mt</string>-->
+
+<!--    <string name="payment_card_country_code_prefix" translatable="false">+258</string>-->
+<!--    <string name="payment_card_phone_number_hint" translatable="false">0001002</string>-->
+<!--    <string name="payment_card_phone_number_prefix" translatable="false">+258 </string>-->
+<!--    <string name="payment_card_pay_button_text">Pay with M-pesa</string>-->
+<!--    <string name="payment_provider_code_placeholder">Paying to %s • %s</string>-->
+<!--    <string name="payment_card_view_phone_number_prompt">Insert your M-Pesa account phone number</string>-->
+
+<!--    &lt;!&ndash; Processing C2B Payment Card&ndash;&gt;-->
+<!--    <string name="c2b_payment_processing_payment_title">Processing Payment</string>-->
+<!--    <string name="c2b_payment_processing_payment_description">-->
+<!--        An USSD notification from Vodacom was sent to the number: +258 %s. Insert your M-pesa pin to authorized the payment transaction.-->
+<!--    </string>-->
+
+<!--    &lt;!&ndash;New C2BPayment Error resources&ndash;&gt;-->
+<!--    <string name="c2b_payment_error_retry_button">Retry</string>-->
+
+<!--    <string name="c2b_payment_payment_generic_error_title">Payment failed</string>-->
+<!--    <string name="c2b_payment_payment_generic_error_description">Something went wrong while trying to process your payment, please try again later.</string>-->
+
+<!--    &lt;!&ndash;User Errors&ndash;&gt;-->
+<!--    <string name="c2b_payment_user_error_insuficient_balance_message">The payment failed because the account does not have sufficient balance</string>-->
+<!--    <string name="c2b_payment_user_error_cancelled_authentication">The payment failed because you cancelled the authentication. please try again later.</string>-->
+<!--    <string name="c2b_payment_user_error_account_not_active">The payment failed because the number inserted does not have a valid M-pesa account</string>-->
+<!--    <string name="c2b_payment_user_error_customer_has_problems">The payment failed because of some problems on your account. Please contact Vodacom for support.</string>-->
+<!--    <string name="c2b_payment_user_error_invalid_number">The payment failed because the inserted phone number is not valid.</string>-->
+<!--    <string name="c2b_payment_user_error_network_error">The payment failed because you are not connected to the internet. Please check your connection and try again</string>-->
+
+<!--    <string name="message">Payment successful</string>-->
+<!--    <string name="c2b_payment_success_description">You successfully paid %s Mtn to %s</string>-->
+
+<!--</resources>-->
