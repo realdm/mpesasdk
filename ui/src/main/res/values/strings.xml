@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="payment_activity_toolbar_title">Faça o Pagamento</string>
-    <string name="payment_card_pay_button_text">Pague com o M-Pesa</string>
-    <string name="payment_card_view_phone_number_prompt">Insira o número de telefone da sua conta M-Pesa</string>
+    <string name="payment_card_pay_button_text">Pagar com o carteira móvel</string>
+    <string name="payment_card_view_phone_number_prompt">Insira o número de telefone da sua carteira móvel</string>
     <string name="c2b_payment_processing_payment_title">Verifique o seu telefone</string>
     <string name="c2b_payment_processing_payment_description">
-        Uma notificação USSD foi enviada para o número: %s. Insira o PIN do seu M-Pesa para completar a transação.
+        Uma notificação USSD foi enviada para o número: %s. Insira o PIN da sua carteira móvel para completar a transação.
     </string>
 
     <string name="payment_card_currency" translatable="false">Mt</string>
