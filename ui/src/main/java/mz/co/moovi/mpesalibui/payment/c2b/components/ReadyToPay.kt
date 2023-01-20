@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -125,7 +126,7 @@ fun ReadyToPay(
                     .wrapContentWidth()
                     .padding(start = 8.dp)
                     .focusable(enabled = true),
-                textStyle = MaterialTheme.typography.h4,
+                textStyle = MaterialTheme.typography.h4.copy(color = MaterialTheme.colors.onSurface),
                 onValueChange = {
                     val number = it.take(9)
                     if (it.isEmpty() || it.isBlank()) {
@@ -138,7 +139,8 @@ fun ReadyToPay(
                 },
                 maxLines = 1,
                 value = viewState.phoneNumber,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                cursorBrush = SolidColor(MaterialTheme.colors.onSurface)
             )
         }
 

@@ -253,11 +253,15 @@ class C2BPaymentViewModel constructor(
 
     private fun hasValidPhoneNumber(): Boolean {
         val phoneNumber = state.phoneNumber
-        val isVodacomMozambiqueNumber = when (phoneNumber.take(2)) {
-            "84", "85" -> true
-            else -> false
+        val isValidMozambiqueNumber = if(phoneNumber.isEmpty()) {
+            false
+        } else {
+            when (phoneNumber.take(2).toInt()) {
+                in 82..89 -> true
+                else -> false
+            }
         }
-        return phoneNumber.isNotEmpty() && phoneNumber.length == 9 && isVodacomMozambiqueNumber
+        return phoneNumber.isNotEmpty() && phoneNumber.length == 9 && isValidMozambiqueNumber
     }
 
     data class State(val phoneNumber: String)
