@@ -1,27 +1,27 @@
-# M-pesa SDK
+# M-Pesa SDK
 
 [![](https://jitpack.io/v/realdm/mpesasdk.svg)](https://jitpack.io/#realdm/mpesasdk)
 
-M-pesa sdk is an unofficial sdk with the aim to make it easy to integrate with the Vodacom Mozambique
-M-pesa payments api on android apps.
+M-Pesa sdk is an unofficial sdk with the aim to make it easy to integrate with the Vodacom Mozambique
+M-Pesa payments api on android apps.
 
 ## Usage
 
 ### Getting M-Pesa Credentials
 
-Create an account on the Vodacom Mozambique M-pesa [website](https://developer.mpesa.vm.co.mz/) in 
-order to get the credentials and full documentation of the API
+Create an account on the Vodacom Mozambique M-Pesa [website](https://developer.mpesa.vm.co.mz/) in 
+order to get the credentials and full documentation of the API.
 
 ### Core
 
-This library provides the core components to perform the network operation to the M-pesa api. 
+This library provides the core components to perform the network operation to the M-Pesa api. 
 This is the library that powers the ui library and you can use it to create your own ui implementation
-of the SDK that better suits your project needs.
+of the SDK that better suits your project's needs.
 
 This library makes the network calls using Retrofit and the responses are adapter to RxJava2 types
 using the RxJava2Adapter.
 
-#### Create an M-pesa service
+#### Create an M-Pesa service
 ```kotlin
 fun createMpesaService(): MpesaService {
    val config = MpesaConfig(baseUrl = API_BASE_URL, apiKey = apiKey, publicKey = publicKey)
@@ -89,11 +89,11 @@ Latest versions available in [Jitpack Repository](https://jitpack.io/#realdm/mpe
 
 
 ### Ui
-This library allows the easy integration of the M-pesa payments on an android app with a ui backed
+This library allows the easy integration of the M-Pesa payments on an android app with a ui backed
 by the core library that handles everything needed to make a payment.
 
 #### Initialize the SDK
-Initialize the SDK on the Application `onCreate` callback.
+Initialize the SDK on the Application's `onCreate` callback.
 Note: Calling init more than once will throw an IllegalStateException.
 
 ```kotlin
@@ -110,7 +110,7 @@ Note: The endpoint url's for the sandbox and production environment are constant
       SANDBOX_BASE_URL and PRODUCTION_BASE_URL respectively.  
 
 #### Make Payment
-Make the payment by calling the `pay` provided by the M-pesa sdk. 
+Make the payment by calling the `pay` provided by the M-Pesa sdk. 
 This method call will start an activity for result that will show the M-Pesa payment Ui to process
 the payment and send a result back when it is done.
 
