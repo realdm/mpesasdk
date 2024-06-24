@@ -78,6 +78,7 @@ class C2BPaymentViewModel constructor(
                             is TransactionResponseCode.DeveloperCode -> handleDeveloperTransactionResponseCode(
                                 code
                             )
+                            null -> {}
                         }
                     }
                     is Response.Success -> {

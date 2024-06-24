@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.google.accompanist.insets.navigationBarsWithImePadding
@@ -75,10 +76,8 @@ fun ReadyToPay(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-            Image(
-                painter = rememberImagePainter(data = viewState.providerLogo, builder = {
-                    transformations(CircleCropTransformation())
-                }),
+            AsyncImage(
+                model = viewState.providerLogo,
                 contentDescription = null,
                 modifier = Modifier
                     .size(56.dp)
