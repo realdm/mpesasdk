@@ -1,9 +1,14 @@
 package mz.co.moovi.mpesalibui.payment.c2b.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,7 +29,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import mz.co.moovi.mpesalibui.R
@@ -77,13 +83,16 @@ fun ReadyToPay(
             modifier = Modifier.padding(16.dp)
         ) {
             AsyncImage(
-                model = viewState.providerLogo,
+                model = ImageRequest.Builder(LocalContext.current).data(viewState.providerLogo)
+                    .crossfade(true)
+                    .transformations(CircleCropTransformation())
+                    .build(),
                 contentDescription = null,
                 modifier = Modifier
                     .size(56.dp)
-                    .border(2.dp, Grey300, shape = CircleShape)
+                    .border(2.dp, Grey300, shape = CircleShape),
 
-            )
+                )
             Text(
                 text = viewState.providerName,
                 style = MaterialTheme.typography.body1,
